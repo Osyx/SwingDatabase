@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Created by Oscar on 17-01-14.
  */
+@SuppressWarnings("ALL")
 public class ArenaDAO {
 
     // DB connection variable
@@ -54,6 +55,7 @@ public class ArenaDAO {
             }
 
             myStmt.close();
+            myRs.close();
 
             return list;
 
@@ -64,8 +66,62 @@ public class ArenaDAO {
         return null;
     }
 
-    public void searchArenas() {
+    public List<Arena> searchArenas(String searchFor, String where) {
+        List<Arena> list = new ArrayList<>();
 
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+
+        try {
+            myStmt = conn.prepareStatement("SELECT ? FROM Arena WHERE ?");
+            myStmt.setString(1, searchFor);
+            myStmt.setString(2, where);
+            myRs = myStmt.executeQuery();
+
+            while(myRs.next()) {
+                Arena tempArena = convertRowToArena(myRs);
+                list.add(tempArena);
+            }
+
+            myStmt.close();
+            myRs.close();
+
+            return list;
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+
+    }
+    public List<Tournament> searchArenaTournaments(String arena) {
+        List<Tournament> list = new ArrayList<>();
+
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+
+        try {
+            myStmt = conn.prepareStatement("SELECT namn FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ?");
+            myStmt.setString(1, arena);
+            myRs = myStmt.executeQuery();
+
+            while(myRs.next()) {
+                Tournament tempTournament = TournamentDAO.convertRowToTournament(myRs);
+                list.add(tempTournament);
+            }
+
+            myStmt.close();
+            myRs.close();
+
+            return list;
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private Arena convertRowToArena(ResultSet resultSet) throws SQLException {
