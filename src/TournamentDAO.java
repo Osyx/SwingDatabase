@@ -98,7 +98,7 @@ public class TournamentDAO {
         ResultSet myRs = null;
 
         try {
-            myStmt = conn.prepareStatement("SELECT arenanamn FROM Turneringsarena, Turnering WHERE Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ?");
+            myStmt = conn.prepareStatement("SELECT arenanamn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanam = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ?");
             myStmt.setString(1, tournament);
             myRs = myStmt.executeQuery();
 
@@ -122,8 +122,8 @@ public class TournamentDAO {
 
         int id = resultSet.getInt("turneringsID");
         String name = resultSet.getString("namn");
-        Date startdate = resultSet.getDate("startdatum");
-        Date enddate = resultSet.getDate("slutdatum");
+        Date startdate = resultSet.getDate("start");
+        Date enddate = resultSet.getDate("slut");
 
         return new Tournament(id, name, startdate, enddate);
     }
