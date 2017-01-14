@@ -14,6 +14,8 @@ public class allSportTV_GUI extends JFrame {
 	private JTextField arenaNameTextField;
 	private JTable table;
 	private JFrame currentFrame;
+	private ArenaDAO arenaDAO;
+	private TournamentDAO tournamentDAO;
 
 	/**
 	 * Launch the application.
@@ -43,6 +45,9 @@ public class allSportTV_GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public allSportTV_GUI() {
+
+	    arenaDAO = new ArenaDAO();
+	    tournamentDAO = new TournamentDAO();
 
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,16 +95,8 @@ public class allSportTV_GUI extends JFrame {
 		JButton btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        try {
-                            ShowAssociated frame2 = new ShowAssociated();
-                            frame2.setVisible(true);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+
+
             }
         });
 		panel.add(btnSearch);
@@ -113,5 +110,18 @@ public class allSportTV_GUI extends JFrame {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 	}
+
+	static void createNewAssociated() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    ShowAssociated frame2 = new ShowAssociated();
+                    frame2.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 }
