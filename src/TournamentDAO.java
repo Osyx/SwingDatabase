@@ -45,35 +45,7 @@ public class TournamentDAO {
 
         try {
             myStmt = conn.createStatement();
-            myRs = myStmt.executeQuery("SELECT * FROM Turnering");
-
-            while(myRs.next()) {
-                list.add(convertRowToTournament(myRs));
-            }
-
-            myStmt.close();
-            myRs.close();
-
-            return list;
-
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public List<Tournament> searchTournaments(String searchFor, String where) {
-        List<Tournament> list = new ArrayList<>();
-
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
-
-        try {
-            myStmt = conn.prepareStatement("SELECT ? FROM Turnering WHERE ?");
-            myStmt.setString(1, searchFor);
-            myStmt.setString(2, where);
-            myRs = myStmt.executeQuery();
+            myRs = myStmt.executeQuery("SELECT * FROM Turnering ORDER BY namn ASC");
 
             while(myRs.next()) {
                 list.add(convertRowToTournament(myRs));
@@ -98,7 +70,7 @@ public class TournamentDAO {
         ResultSet myRs = null;
 
         try {
-            myStmt = conn.prepareStatement("SELECT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ?");
+            myStmt = conn.prepareStatement("SELECT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ? ORDER BY arenanamn ASC");
             myStmt.setString(1, tournament);
             myRs = myStmt.executeQuery();
 

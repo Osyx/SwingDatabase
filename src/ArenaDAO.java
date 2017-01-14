@@ -45,35 +45,7 @@ public class ArenaDAO {
 
         try {
             myStmt = conn.createStatement();
-            myRs = myStmt.executeQuery("SELECT * FROM Arena");
-
-            while(myRs.next()) {
-                list.add(convertRowToArena(myRs));
-            }
-
-            myStmt.close();
-            myRs.close();
-
-            return list;
-
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public List<Arena> searchArenas(String searchFor, String where) {
-        List<Arena> list = new ArrayList<>();
-
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
-
-        try {
-            myStmt = conn.prepareStatement("SELECT ? FROM Arena WHERE ?");
-            myStmt.setString(1, searchFor);
-            myStmt.setString(2, where);
-            myRs = myStmt.executeQuery();
+            myRs = myStmt.executeQuery("SELECT * FROM Arena ORDER BY namn ASC");
 
             while(myRs.next()) {
                 list.add(convertRowToArena(myRs));
@@ -98,7 +70,7 @@ public class ArenaDAO {
         ResultSet myRs = null;
 
         try {
-            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ?");
+            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY namn ASC");
             myStmt.setString(1, arena);
             myRs = myStmt.executeQuery();
 
