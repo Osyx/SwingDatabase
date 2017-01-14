@@ -68,9 +68,14 @@ public class ArenaDAO {
 
     }
 
-    private Arena convertRowToArena(ResultSet resultSet) {
+    private Arena convertRowToArena(ResultSet resultSet) throws SQLException {
 
+        String name = resultSet.getString("namn");
+        String place = resultSet.getString("plats");
+        int size = resultSet.getInt("storlek");
+        Date builddate = resultSet.getDate("byggdatum");
+        boolean active = resultSet.getBoolean("aktiv");
 
-        return null;
+        return new Arena(name, place, size, builddate, active);
     }
 }
