@@ -35,9 +35,7 @@ public class ArenaDAO {
         catch (Exception e) {
             e.printStackTrace();
         }
-
-
-}
+    }
 
     public List<Arena> getAllArenas() {
         List<Arena> list = new ArrayList<>();
@@ -50,8 +48,7 @@ public class ArenaDAO {
             myRs = myStmt.executeQuery("SELECT * FROM Arena");
 
             while(myRs.next()) {
-                Arena tempArena = convertRowToArena(myRs);
-                list.add(tempArena);
+                list.add(convertRowToArena(myRs));
             }
 
             myStmt.close();
@@ -79,8 +76,7 @@ public class ArenaDAO {
             myRs = myStmt.executeQuery();
 
             while(myRs.next()) {
-                Arena tempArena = convertRowToArena(myRs);
-                list.add(tempArena);
+                list.add(convertRowToArena(myRs));
             }
 
             myStmt.close();
@@ -93,8 +89,6 @@ public class ArenaDAO {
         }
 
         return null;
-
-
     }
     public List<Tournament> searchArenaTournaments(String arena) {
         List<Tournament> list = new ArrayList<>();
@@ -108,8 +102,7 @@ public class ArenaDAO {
             myRs = myStmt.executeQuery();
 
             while(myRs.next()) {
-                Tournament tempTournament = TournamentDAO.convertRowToTournament(myRs);
-                list.add(tempTournament);
+                list.add(TournamentDAO.convertRowToTournament(myRs));
             }
 
             myStmt.close();
@@ -124,7 +117,7 @@ public class ArenaDAO {
         return null;
     }
 
-    private Arena convertRowToArena(ResultSet resultSet) throws SQLException {
+    public static Arena convertRowToArena(ResultSet resultSet) throws SQLException {
 
         String name = resultSet.getString("namn");
         String place = resultSet.getString("plats");
