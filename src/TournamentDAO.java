@@ -90,6 +90,32 @@ public class TournamentDAO {
         return null;
     }
 
+    public void linkArenaAndTournament(String arena, String tournament) {
+        List<Tournament> list = new ArrayList<>();
+
+        PreparedStatement myStmt = null;
+        ResultSet myRs = null;
+
+        try {
+
+            myStmt = conn.prepareStatement("SELECT turneringsID FROM Turnering WHERE namn = ?");
+            myStmt.setString(1, tournament);
+            myRs = myStmt.executeQuery();
+            myRs.next();
+            Integer turneringsID = myRs.getInt("turneringsID");
+            myStmt = conn.prepareStatement("INSERT INTO Turneringsarena (turneringsID, arenanamn) VALUES (?, ?)");
+            myStmt.setString(1, turneringsID.toString());
+            myStmt.setString(2, arena);
+            myStmt.executeUpdate();
+
+            myStmt.close();
+            myRs.close();
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Tournament convertRowToTournament(ResultSet resultSet) throws SQLException {
 
         int id = resultSet.getInt("turneringsID");
@@ -103,6 +129,7 @@ public class TournamentDAO {
     public static void main(String[] args) throws Exception {
 
         TournamentDAO dao = new TournamentDAO();
+        dao.linkArenaAndTournament("Rungrado", "Kalle Anka cupen");
         System.out.println(dao.searchTournamentArenas("Kalle Anka cupen"));
 
         System.out.println(dao.getAllTournaments());

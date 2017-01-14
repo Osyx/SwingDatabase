@@ -101,12 +101,69 @@ public class ArenaDAO {
         return new Arena(name, place, size, builddate, active);
     }
 
+    public void insertArena() throws Exception {
+        // Local variables
+        String query;
+        PreparedStatement stmt;
+        String arenanamn;
+        String plats;
+        String storlek;
+        String byggdatum;
+        boolean aktiv;
+
+        // Create a Scanner in order to allow the user to provide input.
+        java.util.Scanner in = new java.util.Scanner(System.in);
+
+        // Ask the user to specify a value for förnamn.
+        System.out.print("Ange arenanamnet: ");
+        // Retrieve the value and place it in the variable arenanamn.
+        arenanamn = in.nextLine();
+        // Ask the user to specify a value for efternamn.
+        System.out.print("Ange dess plats: ");
+        // Retrieve the value and place it in the variable plats.
+        plats = in.nextLine();
+        // Ask the user to specify a value for storlek.
+        System.out.print("Ange storleken: ");
+        // Retrieve the value and place it in the variable storlek.
+        storlek = in.nextLine();
+        // Ask the user to specify a value for byggdatum.
+        System.out.print("Ange byggdatumet: ");
+        // Retrieve the value and place it in the variable byggdatum.
+        byggdatum = in.nextLine();
+        // Ask the user to specify a value for stad.
+        System.out.print("Ange om den ar aktiv: ");
+        // Retrieve the value and place it in the variable aktiv.
+        aktiv = in.nextBoolean();
+
+        // Set the SQL statement into the query variable
+        query = "INSERT INTO Arena (namn, plats, storlek, byggdatum, aktiv) VALUES (?, ?, ?, ?, ?)";
+
+        // Create a statement associated to the connection and the query.
+        // The new statement is placed in the variable stmt.
+        stmt = conn.prepareStatement(query);
+
+        // Provide the values for the ?'s in the SQL statement.
+        // The value of the variable arenanamn is the first,
+        // plats is second, storlek is third, byggdatum is forth
+        // and aktiv is fifth
+        stmt.setString(1, arenanamn);
+        stmt.setString(2, plats);
+        stmt.setString(3, storlek);
+        stmt.setDate(4, java.sql.Date.valueOf(byggdatum));
+        stmt.setBoolean(5, aktiv);
+
+        // Execute the SQL statement that is prepared in the variable stmt
+        stmt.executeUpdate();
+
+        // Close the variable stmt and release all resources bound to it
+        stmt.close();
+    }
+
     public static void main(String[] args) throws Exception {
 
         ArenaDAO dao = new ArenaDAO();
         System.out.println(dao.searchArenaTournaments("Camp Nou"));
-
+        dao.insertArena();
         System.out.println(dao.getAllArenas());
     }
-
 }
