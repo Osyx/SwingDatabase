@@ -26,17 +26,7 @@ public class ShowAssociated extends JFrame {
             e.printStackTrace();
         }
 
-        EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ShowAssociated frame = new ShowAssociated();
-					frame.setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+        allSportTV_GUI.createNewAssociated();
 	}
 
 	/**
