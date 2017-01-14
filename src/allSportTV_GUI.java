@@ -1,31 +1,19 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.FlowLayout;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import java.awt.Component;
-import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JMenuBar;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JSeparator;
 
 public class allSportTV_GUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField arenaNameTextField;
 	private JTable table;
+	private JFrame currentFrame;
 
 	/**
 	 * Launch the application.
@@ -50,6 +38,7 @@ public class allSportTV_GUI extends JFrame {
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 638, 306);
+		currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -90,6 +79,20 @@ public class allSportTV_GUI extends JFrame {
 		arenaNameTextField.setColumns(10);
 		
 		JButton btnSearch = new JButton("Search");
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        try {
+                            ShowAssociated frame2 = new ShowAssociated();
+                            frame2.setVisible(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
 		panel.add(btnSearch);
 		
 		Box horizontalBox = Box.createHorizontalBox();
