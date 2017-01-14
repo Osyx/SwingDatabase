@@ -98,7 +98,7 @@ public class TournamentDAO {
         ResultSet myRs = null;
 
         try {
-            myStmt = conn.prepareStatement("SELECT arenanamn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanam = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ?");
+            myStmt = conn.prepareStatement("SELECT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ?");
             myStmt.setString(1, tournament);
             myRs = myStmt.executeQuery();
 
