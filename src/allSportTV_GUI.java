@@ -19,6 +19,14 @@ public class allSportTV_GUI extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -35,6 +43,7 @@ public class allSportTV_GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public allSportTV_GUI() {
+
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 638, 306);
