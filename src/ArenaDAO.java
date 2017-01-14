@@ -45,35 +45,7 @@ public class ArenaDAO {
 
         try {
             myStmt = conn.createStatement();
-            myRs = myStmt.executeQuery("SELECT * FROM Arena");
-
-            while(myRs.next()) {
-                list.add(convertRowToArena(myRs));
-            }
-
-            myStmt.close();
-            myRs.close();
-
-            return list;
-
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public List<Arena> searchArenas(String searchFor, String where) {
-        List<Arena> list = new ArrayList<>();
-
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
-
-        try {
-            myStmt = conn.prepareStatement("SELECT ? FROM Arena WHERE ?");
-            myStmt.setString(1, searchFor);
-            myStmt.setString(2, where);
-            myRs = myStmt.executeQuery();
+            myRs = myStmt.executeQuery("SELECT * FROM Arena ORDER BY namn ASC");
 
             while(myRs.next()) {
                 list.add(convertRowToArena(myRs));
@@ -98,7 +70,7 @@ public class ArenaDAO {
         ResultSet myRs = null;
 
         try {
-            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ?");
+            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY namn ASC");
             myStmt.setString(1, arena);
             myRs = myStmt.executeQuery();
 
@@ -129,12 +101,69 @@ public class ArenaDAO {
         return new Arena(name, place, size, builddate, active);
     }
 
+    public void insertArena() throws Exception {
+        // Local variables
+        String query;
+        PreparedStatement stmt;
+        String arenanamn;
+        String plats;
+        String storlek;
+        String byggdatum;
+        boolean aktiv;
+
+        // Create a Scanner in order to allow the user to provide input.
+        java.util.Scanner in = new java.util.Scanner(System.in);
+
+        // Ask the user to specify a value for förnamn.
+        System.out.print("Ange arenanamnet: ");
+        // Retrieve the value and place it in the variable arenanamn.
+        arenanamn = in.nextLine();
+        // Ask the user to specify a value for efternamn.
+        System.out.print("Ange dess plats: ");
+        // Retrieve the value and place it in the variable plats.
+        plats = in.nextLine();
+        // Ask the user to specify a value for storlek.
+        System.out.print("Ange storleken: ");
+        // Retrieve the value and place it in the variable storlek.
+        storlek = in.nextLine();
+        // Ask the user to specify a value for byggdatum.
+        System.out.print("Ange byggdatumet: ");
+        // Retrieve the value and place it in the variable byggdatum.
+        byggdatum = in.nextLine();
+        // Ask the user to specify a value for stad.
+        System.out.print("Ange om den ar aktiv: ");
+        // Retrieve the value and place it in the variable aktiv.
+        aktiv = in.nextBoolean();
+
+        // Set the SQL statement into the query variable
+        query = "INSERT INTO Arena (namn, plats, storlek, byggdatum, aktiv) VALUES (?, ?, ?, ?, ?)";
+
+        // Create a statement associated to the connection and the query.
+        // The new statement is placed in the variable stmt.
+        stmt = conn.prepareStatement(query);
+
+        // Provide the values for the ?'s in the SQL statement.
+        // The value of the variable arenanamn is the first,
+        // plats is second, storlek is third, byggdatum is forth
+        // and aktiv is fifth
+        stmt.setString(1, arenanamn);
+        stmt.setString(2, plats);
+        stmt.setString(3, storlek);
+        stmt.setDate(4, java.sql.Date.valueOf(byggdatum));
+        stmt.setBoolean(5, aktiv);
+
+        // Execute the SQL statement that is prepared in the variable stmt
+        stmt.executeUpdate();
+
+        // Close the variable stmt and release all resources bound to it
+        stmt.close();
+    }
+
     public static void main(String[] args) throws Exception {
 
         ArenaDAO dao = new ArenaDAO();
         System.out.println(dao.searchArenaTournaments("Camp Nou"));
-
+        dao.insertArena();
         System.out.println(dao.getAllArenas());
     }
-
 }
