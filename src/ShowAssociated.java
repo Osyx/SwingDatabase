@@ -17,7 +17,16 @@ public class ShowAssociated extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+
+	    try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					ShowAssociated frame = new ShowAssociated();
