@@ -14,7 +14,7 @@ public class ArenaDAO {
     ArenaDAO() {
 
         // DB access variables
-        String URL = "jdbc:ucanaccess://TheProject.accdb";
+        String URL = "jdbc:ucanaccess://src/TheProject.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
@@ -90,6 +90,7 @@ public class ArenaDAO {
 
         return null;
     }
+
     public List<Tournament> searchArenaTournaments(String arena) {
         List<Tournament> list = new ArrayList<>();
 
@@ -127,4 +128,13 @@ public class ArenaDAO {
 
         return new Arena(name, place, size, builddate, active);
     }
+
+    public static void main(String[] args) throws Exception {
+
+        ArenaDAO dao = new ArenaDAO();
+        System.out.println(dao.searchArenaTournaments("Camp Nou"));
+
+        System.out.println(dao.getAllArenas());
+    }
+
 }

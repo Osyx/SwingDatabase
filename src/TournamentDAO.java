@@ -14,7 +14,7 @@ public class TournamentDAO {
     TournamentDAO() {
 
         // DB access variables
-        String URL = "jdbc:ucanaccess://TheProject.accdb";
+        String URL = "jdbc:ucanaccess://src/TheProject.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
@@ -126,5 +126,13 @@ public class TournamentDAO {
         Date enddate = resultSet.getDate("slutdatum");
 
         return new Tournament(id, name, startdate, enddate);
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        TournamentDAO dao = new TournamentDAO();
+        System.out.println(dao.searchTournamentArenas("Kalle Anka cupen"));
+
+        System.out.println(dao.getAllTournaments());
     }
 }
