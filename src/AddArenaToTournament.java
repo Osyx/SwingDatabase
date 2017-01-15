@@ -1,16 +1,18 @@
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AddArenaToTournament extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField arenaField;
+	private JTextField tourField;
     private JFrame currentFrame;
+    private TournamentDAO tournamentDAO;
 
 	/**
 	 * Launch the application.
@@ -22,7 +24,9 @@ public class AddArenaToTournament extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AddArenaToTournament() {
+	public AddArenaToTournament(TournamentDAO tournamentDAO) {
+        this.tournamentDAO = tournamentDAO;
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 143);
 		
@@ -35,16 +39,16 @@ public class AddArenaToTournament extends JFrame {
 
         contentPane = new JPanel();
         currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
-        textField = new JTextField();
-        textField_1 = new JTextField();
+        arenaField = new JTextField();
+        tourField = new JTextField();
 
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        textField.setColumns(10);
-        textField_1.setColumns(10);
+        arenaField.setColumns(10);
+        tourField.setColumns(10);
 
-        textField.setHorizontalAlignment(SwingConstants.CENTER);
-        textField_1.setHorizontalAlignment(SwingConstants.CENTER);
+        arenaField.setHorizontalAlignment(SwingConstants.CENTER);
+        tourField.setHorizontalAlignment(SwingConstants.CENTER);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
         lblAddAArena.setHorizontalAlignment(SwingConstants.CENTER);
@@ -56,10 +60,21 @@ public class AddArenaToTournament extends JFrame {
         setContentPane(contentPane);
 		panel.add(label);
 		panel.add(lblNewLabel_1);
-		panel.add(textField);
-		panel.add(textField_1);
+		panel.add(arenaField);
+		panel.add(tourField);
         panel_1.add(btnCreate);
         panel.setLayout(new GridLayout(2, 2, 0, 0));
+
+        btnCreate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String arenaLink = arenaField.getText();
+                String tournamentLink = tourField.getText();
+                arenaField.setText("");
+                tourField.setText("");
+                tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
+                JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
+            }
+        });
 	}
 
 }

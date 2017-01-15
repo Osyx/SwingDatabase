@@ -14,8 +14,8 @@ public class allSportTV_GUI extends JFrame {
 	private JTextField arenaNameTextField;
 	private JTable table;
 	private JFrame currentFrame;
-	private ArenaDAO arenaDAO;
-	private TournamentDAO tournamentDAO;
+	private static ArenaDAO arenaDAO;
+	private static TournamentDAO tournamentDAO;
 
 	/**
 	 * Launch the application.
@@ -98,10 +98,12 @@ public class allSportTV_GUI extends JFrame {
                 if(!chckbxmntmArenas.getState()) {
                     chckbxmntmTournaments.setState(true);
                     lblEnterText.setText("Enter tournament:");
+                    btnSearch.doClick();
                 }
                 else {
                     chckbxmntmTournaments.setState(false);
                     lblEnterText.setText("Enter arena:");
+                    btnSearch.doClick();
                 }
             }
         });
@@ -111,10 +113,12 @@ public class allSportTV_GUI extends JFrame {
                 if(!chckbxmntmTournaments.getState()) {
                     chckbxmntmArenas.setState(true);
                     lblEnterText.setText("Enter arena:");
+                    btnSearch.doClick();
                 }
                 else {
                     chckbxmntmArenas.setState(false);
                     lblEnterText.setText("Enter tournament:");
+                    btnSearch.doClick();
                 }
             }
         });
@@ -122,8 +126,29 @@ public class allSportTV_GUI extends JFrame {
 
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
-                System.out.println(result);
+                if(lblEnterText.getText().contains("tournament")) {
+                    if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
+                        List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
+                        TournamentTableModel tournamentTableModel = new TournamentTableModel(allTournaments);
+                        table.setModel(tournamentTableModel);
+                    } else {
+                        List<Arena> result = tournamentDAO.searchTournamentArenas(arenaNameTextField.getText());
+
+                        ArenaTableModel arenaTableModel = new ArenaTableModel(result);
+                        table.setModel(arenaTableModel);
+                    }
+                } else {
+                    if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
+                        List<Arena> allArenas = arenaDAO.getAllArenas();
+                        ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
+                        table.setModel(arenaTableModel);
+                    } else {
+                        List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
+
+                        TournamentTableModel tournamentTableModel = new TournamentTableModel(result);
+                        table.setModel(tournamentTableModel);
+                    }
+                }
             }
         });
 
@@ -140,7 +165,9 @@ public class allSportTV_GUI extends JFrame {
         });
 
         List<Arena> allArenas = arenaDAO.getAllArenas();
-        System.out.println(allArenas);
+        ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
+        table.setModel(arenaTableModel);
+
     }
 
 	static void createNewAssociated() {
@@ -160,7 +187,7 @@ public class allSportTV_GUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    CreateArena frame = new CreateArena();
+                    CreateArena frame = new CreateArena(arenaDAO);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -173,7 +200,7 @@ public class allSportTV_GUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    AddArenaToTournament frame = new AddArenaToTournament();
+                    AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
