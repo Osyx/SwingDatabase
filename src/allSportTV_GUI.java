@@ -170,19 +170,6 @@ public class allSportTV_GUI extends JFrame {
 
     }
 
-	static void createNewAssociated() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ShowAssociated frame = new ShowAssociated();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     void createNewCreateArena() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
