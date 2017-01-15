@@ -1,21 +1,17 @@
-import java.awt.BorderLayout;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
-public class CreateArena extends JFrame {
+class CreateArena extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField txtEnterAName;
-	private JTextField txtEnterSize;
-	private JTextField txtEnterLocation;
-	private JTextField txtEnterBuildDate;
-	private JCheckBox chckbxInUse;
-	private JLabel lblCreatingANew;
-    private JFrame currentFrame;
-    private ArenaDAO arenaDAO;
+    private final JTextField txtEnterAName;
+	private final JTextField txtEnterSize;
+	private final JTextField txtEnterLocation;
+	private final JTextField txtEnterBuildDate;
+	private final JCheckBox chckbxInUse;
+    private final ArenaDAO arenaDAO;
 
 	/**
 	 * Create the frame.
@@ -30,13 +26,12 @@ public class CreateArena extends JFrame {
         JPanel panel = new JPanel();
         JButton btnCreate = new JButton("Create!");
 
-		contentPane = new JPanel();
-        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
+        JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(btnCreate, BorderLayout.SOUTH);
 		contentPane.add(panel, BorderLayout.CENTER);
-		lblCreatingANew = new JLabel("Creating a new Arena");
+        JLabel lblCreatingANew = new JLabel("Creating a new Arena");
 		lblCreatingANew.setHorizontalAlignment(SwingConstants.CENTER);
 		txtEnterAName = new JTextField();
 		txtEnterAName.setText("Enter the arenas name:");
@@ -63,26 +58,24 @@ public class CreateArena extends JFrame {
         panel.add(txtEnterBuildDate);
         panel.setLayout(new GridLayout(2, 3, 0, 0));
 
-        btnCreate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String arenaName = txtEnterAName.getText();
-                String location = txtEnterLocation.getText();
-                String size = txtEnterSize.getText();
-                String builddate = txtEnterBuildDate.getText();
-                boolean active = chckbxInUse.isSelected();
-                txtEnterAName.setText("Enter a name for the arena:");
-                txtEnterLocation.setText("Enter its location:");
-                txtEnterSize.setText("Enter its size:");
-                txtEnterBuildDate.setText("Enter its build date:");
-                chckbxInUse.setSelected(false);
+        btnCreate.addActionListener(e -> {
+            String arenaName = txtEnterAName.getText();
+            String location = txtEnterLocation.getText();
+            String size = txtEnterSize.getText();
+            String builddate = txtEnterBuildDate.getText();
+            boolean active = chckbxInUse.isSelected();
+            txtEnterAName.setText("Enter a name for the arena:");
+            txtEnterLocation.setText("Enter its location:");
+            txtEnterSize.setText("Enter its size:");
+            txtEnterBuildDate.setText("Enter its build date:");
+            chckbxInUse.setSelected(false);
 
-                try {
-                    arenaDAO.insertArena(arenaName, location, size, builddate, active);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-                JOptionPane.showMessageDialog(panel, "Added!\n" + arenaName + " was added to the database.");
+            try {
+                arenaDAO.insertArena(arenaName, location, size, builddate, active);
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
+            JOptionPane.showMessageDialog(panel, "Added!\n" + arenaName + " was added to the database.");
         });
 
         txtEnterAName.addFocusListener(new FocusAdapter() {

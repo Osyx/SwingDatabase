@@ -1,4 +1,3 @@
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,17 @@ public class ArenaDAO {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Arena convertRowToArena(ResultSet resultSet) throws SQLException {
+
+        String name = resultSet.getString("namn");
+        String place = resultSet.getString("plats");
+        int size = resultSet.getInt("storlek");
+        Date builddate = resultSet.getDate("byggdatum");
+        boolean active = resultSet.getBoolean("aktiv");
+
+        return new Arena(name, place, size, builddate, active);
     }
 
     public List<Arena> getAllArenas() {
@@ -89,17 +99,6 @@ public class ArenaDAO {
         }
 
         return null;
-    }
-
-    public static Arena convertRowToArena(ResultSet resultSet) throws SQLException {
-
-        String name = resultSet.getString("namn");
-        String place = resultSet.getString("plats");
-        int size = resultSet.getInt("storlek");
-        Date builddate = resultSet.getDate("byggdatum");
-        boolean active = resultSet.getBoolean("aktiv");
-
-        return new Arena(name, place, size, builddate, active);
     }
 
     public void insertArena(String arenaName, String location, String size, String buildDate, boolean active) throws Exception {
