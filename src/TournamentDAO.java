@@ -125,13 +125,4 @@ public class TournamentDAO {
 
         return new Tournament(id, name, startdate, enddate);
     }
-
-    public static void main(String[] args) throws Exception {
-
-        TournamentDAO dao = new TournamentDAO();
-        dao.linkArenaAndTournament("Rungrado", "Kalle Anka cupen");
-        System.out.println(dao.searchTournamentArenas("Kalle Anka cupen"));
-
-        System.out.println(dao.getAllTournaments());
-    }
 }
