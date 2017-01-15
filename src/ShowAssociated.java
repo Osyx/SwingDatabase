@@ -32,14 +32,14 @@ public class ShowAssociated extends JFrame {
 	 */
 	public ShowAssociated() {
         setTitle("Associated tournaments:");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
         JPanel panel = new JPanel();
         JButton btnClose = new JButton("Close");
 
-        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
 		contentPane = new JPanel();
+        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
         contentPane.add(panel, BorderLayout.CENTER);

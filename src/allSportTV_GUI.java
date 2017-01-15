@@ -59,7 +59,7 @@ public class allSportTV_GUI extends JFrame {
         JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
         JMenu mnCreate = new JMenu("Create");
         JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
-        JMenuItem mntmAddArenaTo = new JMenuItem("Add arena to tournament");
+        JMenuItem mntmAddArenaToTournament = new JMenuItem("Add arena to tournament");
         JPanel panel = new JPanel();
         FlowLayout flowLayout = (FlowLayout) panel.getLayout();
         JLabel lblEnterText = new JLabel("Enter arena:");
@@ -67,8 +67,8 @@ public class allSportTV_GUI extends JFrame {
         Box horizontalBox = Box.createHorizontalBox();
         JScrollPane scrollPane = new JScrollPane();
 
-		currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
         contentPane = new JPanel();
+        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         contentPane.add(scrollPane, BorderLayout.CENTER);
@@ -80,6 +80,7 @@ public class allSportTV_GUI extends JFrame {
         setContentPane(contentPane);
         setJMenuBar(menuBar);
         scrollPane.setViewportView(table);
+        chckbxmntmArenas.setSelected(true);
         flowLayout.setAlignment(FlowLayout.LEFT);
         panel.add(lblEnterText);
         panel.add(arenaNameTextField);
@@ -90,8 +91,7 @@ public class allSportTV_GUI extends JFrame {
 		mnSearch.add(chckbxmntmTournaments);
 		menuBar.add(mnCreate);
 		mnCreate.add(mntmCreateNewArena);
-		mnCreate.add(mntmAddArenaTo);
-        chckbxmntmArenas.setSelected(true);
+		mnCreate.add(mntmAddArenaToTournament);
 
         chckbxmntmArenas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -119,10 +119,23 @@ public class allSportTV_GUI extends JFrame {
             }
         });
 
+
         btnSearch.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
                 System.out.println(result);
+            }
+        });
+
+        mntmCreateNewArena.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createNewCreateArena();
+            }
+        });
+
+        mntmAddArenaToTournament.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createNewAddArenaToTournament();
             }
         });
 
@@ -134,8 +147,34 @@ public class allSportTV_GUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ShowAssociated frame2 = new ShowAssociated();
-                    frame2.setVisible(true);
+                    ShowAssociated frame = new ShowAssociated();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    static void createNewCreateArena() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    CreateArena frame = new CreateArena();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    static void createNewAddArenaToTournament() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AddArenaToTournament frame = new AddArenaToTournament();
+                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

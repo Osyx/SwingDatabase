@@ -1,14 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
 import java.awt.GridLayout;
 
 public class CreateArena extends JFrame {
@@ -20,21 +14,13 @@ public class CreateArena extends JFrame {
 	private JTextField txtEnterIts;
 	private JCheckBox chckbxIsItIn;
 	private JLabel lblCreatingANew;
+    private JFrame currentFrame;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CreateArena frame = new CreateArena();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		allSportTV_GUI.createNewCreateArena();
 	}
 
 	/**
@@ -42,13 +28,14 @@ public class CreateArena extends JFrame {
 	 */
 	public CreateArena() {
 		setTitle("Create Arena");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 574, 137);
 
         JPanel panel = new JPanel();
         JButton btnCreate = new JButton("Create!");
 
 		contentPane = new JPanel();
+        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(btnCreate, BorderLayout.SOUTH);
@@ -71,6 +58,7 @@ public class CreateArena extends JFrame {
 		txtEnterIts.setText("Enter its build date:");
 		txtEnterIts.setColumns(10);
 
+        setContentPane(contentPane);
         panel.add(lblCreatingANew);
         panel.add(txtEnterAName);
         panel.add(textField_2);
@@ -78,7 +66,6 @@ public class CreateArena extends JFrame {
         panel.add(txtEnterTheArenas);
         panel.add(txtEnterIts);
         panel.setLayout(new GridLayout(2, 3, 0, 0));
-        setContentPane(contentPane);
 	}
 
 }
