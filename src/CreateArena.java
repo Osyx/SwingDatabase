@@ -18,17 +18,10 @@ public class CreateArena extends JFrame {
     private ArenaDAO arenaDAO;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		allSportTV_GUI.createNewCreateArena();
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public CreateArena(ArenaDAO arenaDAO) {
-	    this.arenaDAO = arenaDAO;
+	public CreateArena(ArenaDAO newArenaDAO) {
+	    this.arenaDAO = newArenaDAO;
 
 		setTitle("Create Arena");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
