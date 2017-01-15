@@ -15,24 +15,17 @@ public class AddArenaToTournament extends JFrame {
     private TournamentDAO tournamentDAO;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		allSportTV_GUI.createNewAddArenaToTournament();
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public AddArenaToTournament(TournamentDAO tournamentDAO) {
-        this.tournamentDAO = tournamentDAO;
+	public AddArenaToTournament(TournamentDAO newTournamentDAO) {
+        this.tournamentDAO = newTournamentDAO;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 143);
 		
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel("Arena:");
-        JLabel lblNewLabel_1 = new JLabel("Tournament:");
+		JLabel lblArena = new JLabel("Arena:");
+        JLabel lblTournament = new JLabel("Tournament:");
         JLabel lblAddAArena = new JLabel("Add a arena to a tournament");
         JPanel panel_1 = new JPanel();
         JButton btnCreate = new JButton("Create");
@@ -49,8 +42,8 @@ public class AddArenaToTournament extends JFrame {
 
         arenaField.setHorizontalAlignment(SwingConstants.CENTER);
         tourField.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblArena.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTournament.setHorizontalAlignment(SwingConstants.CENTER);
         lblAddAArena.setHorizontalAlignment(SwingConstants.CENTER);
 
         contentPane.add(panel, BorderLayout.CENTER);
@@ -58,8 +51,8 @@ public class AddArenaToTournament extends JFrame {
         contentPane.add(panel_1, BorderLayout.SOUTH);
 
         setContentPane(contentPane);
-		panel.add(label);
-		panel.add(lblNewLabel_1);
+		panel.add(lblArena);
+		panel.add(lblTournament);
 		panel.add(arenaField);
 		panel.add(tourField);
         panel_1.add(btnCreate);
@@ -69,9 +62,9 @@ public class AddArenaToTournament extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String arenaLink = arenaField.getText();
                 String tournamentLink = tourField.getText();
+                tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
                 arenaField.setText("");
                 tourField.setText("");
-                tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
                 JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
             }
         });

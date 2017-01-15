@@ -1,3 +1,4 @@
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class ArenaDAO {
     ArenaDAO() {
 
         // DB access variables
-        String URL = "jdbc:ucanaccess://src/TheProject1.accdb";
+        String URL = "jdbc:ucanaccess://src/TheProject.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
@@ -111,28 +112,10 @@ public class ArenaDAO {
         String byggdatum;
         boolean aktiv;
 
-        // Create a Scanner in order to allow the user to provide input.
-        java.util.Scanner in = new java.util.Scanner(System.in);
-
-        // Ask the user to specify a value for förnamn.
-        System.out.print("Ange arenanamnet: ");
-        // Retrieve the value and place it in the variable arenanamn.
         arenanamn = arenaName;
-        // Ask the user to specify a value for efternamn.
-        System.out.print("Ange dess plats: ");
-        // Retrieve the value and place it in the variable plats.
         plats = location;
-        // Ask the user to specify a value for storlek.
-        System.out.print("Ange storleken: ");
-        // Retrieve the value and place it in the variable storlek.
         storlek = size;
-        // Ask the user to specify a value for byggdatum.
-        System.out.print("Ange byggdatumet: ");
-        // Retrieve the value and place it in the variable byggdatum.
         byggdatum = buildDate;
-        // Ask the user to specify a value for stad.
-        System.out.print("Ange om den ar aktiv: ");
-        // Retrieve the value and place it in the variable aktiv.
         aktiv = active;
 
         // Set the SQL statement into the query variable
@@ -157,13 +140,5 @@ public class ArenaDAO {
 
         // Close the variable stmt and release all resources bound to it
         stmt.close();
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        ArenaDAO dao = new ArenaDAO();
-        System.out.println(dao.searchArenaTournaments("Camp Nou"));
-        dao.insertArena("Stadium General", "Stockholm", "50", "2013-03-10", true);
-        System.out.println(dao.getAllArenas());
     }
 }

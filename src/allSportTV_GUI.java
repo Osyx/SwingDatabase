@@ -14,8 +14,8 @@ public class allSportTV_GUI extends JFrame {
 	private JTextField arenaNameTextField;
 	private JTable table;
 	private JFrame currentFrame;
-	private static ArenaDAO arenaDAO;
-	private static TournamentDAO tournamentDAO;
+	private ArenaDAO arenaDAO;
+	private TournamentDAO tournamentDAO;
 
 	/**
 	 * Launch the application.
@@ -46,8 +46,8 @@ public class allSportTV_GUI extends JFrame {
 	 */
 	public allSportTV_GUI() {
 
-	    arenaDAO = new ArenaDAO();
-	    tournamentDAO = new TournamentDAO();
+	    this.arenaDAO = new ArenaDAO();
+	    this.tournamentDAO = new TournamentDAO();
 
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,9 +132,9 @@ public class allSportTV_GUI extends JFrame {
                         TournamentTableModel tournamentTableModel = new TournamentTableModel(allTournaments);
                         table.setModel(tournamentTableModel);
                     } else {
-                        List<Arena> result = tournamentDAO.searchTournamentArenas(arenaNameTextField.getText());
+                        List<Arena> tournamentArenas = tournamentDAO.searchTournamentArenas(arenaNameTextField.getText());
 
-                        ArenaTableModel arenaTableModel = new ArenaTableModel(result);
+                        ArenaTableModel arenaTableModel = new ArenaTableModel(tournamentArenas);
                         table.setModel(arenaTableModel);
                     }
                 } else {
@@ -143,9 +143,9 @@ public class allSportTV_GUI extends JFrame {
                         ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
                         table.setModel(arenaTableModel);
                     } else {
-                        List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
+                        List<Tournament> searchArenaTournaments = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
 
-                        TournamentTableModel tournamentTableModel = new TournamentTableModel(result);
+                        TournamentTableModel tournamentTableModel = new TournamentTableModel(searchArenaTournaments);
                         table.setModel(tournamentTableModel);
                     }
                 }
@@ -170,20 +170,7 @@ public class allSportTV_GUI extends JFrame {
 
     }
 
-	static void createNewAssociated() {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ShowAssociated frame = new ShowAssociated();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    static void createNewCreateArena() {
+    void createNewCreateArena() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -196,7 +183,7 @@ public class allSportTV_GUI extends JFrame {
         });
     }
 
-    static void createNewAddArenaToTournament() {
+    void createNewAddArenaToTournament() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
