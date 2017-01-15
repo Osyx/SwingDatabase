@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class allSportTV_GUI extends JFrame {
 
@@ -52,64 +52,83 @@ public class allSportTV_GUI extends JFrame {
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 638, 306);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu mnSearch = new JMenu("Search");
+        JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
+        JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
+        JMenu mnCreate = new JMenu("Create");
+        JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
+        JMenuItem mntmAddArenaTo = new JMenuItem("Add arena to tournament");
+        JPanel panel = new JPanel();
+        FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+        JLabel lblEnterText = new JLabel("Enter arena:");
+        JButton btnSearch = new JButton("Search");
+        Box horizontalBox = Box.createHorizontalBox();
+        JScrollPane scrollPane = new JScrollPane();
+
 		currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnSearch = new JMenu("Search");
-		menuBar.add(mnSearch);
-		
-		JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
-		chckbxmntmArenas.setSelected(true);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout(0, 0));
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+        contentPane.add(panel, BorderLayout.NORTH);
+        arenaNameTextField = new JTextField();
+        arenaNameTextField.setColumns(10);
+        table = new JTable();
+
+        setContentPane(contentPane);
+        setJMenuBar(menuBar);
+        scrollPane.setViewportView(table);
+        flowLayout.setAlignment(FlowLayout.LEFT);
+        panel.add(lblEnterText);
+        panel.add(arenaNameTextField);
+        panel.add(btnSearch);
+        panel.add(horizontalBox);
+        menuBar.add(mnSearch);
 		mnSearch.add(chckbxmntmArenas);
-		
-		JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
 		mnSearch.add(chckbxmntmTournaments);
-		
-		JMenu mnCreate = new JMenu("Create");
 		menuBar.add(mnCreate);
-		
-		JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
 		mnCreate.add(mntmCreateNewArena);
-		
-		JMenuItem mntmAddArenaTo = new JMenuItem("Add arena to tournament");
 		mnCreate.add(mntmAddArenaTo);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-		
-		JPanel panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		contentPane.add(panel, BorderLayout.NORTH);
-		
-		JLabel lblEnterArena = new JLabel("Enter arena");
-		panel.add(lblEnterArena);
-		
-		arenaNameTextField = new JTextField();
-		panel.add(arenaNameTextField);
-		arenaNameTextField.setColumns(10);
-		
-		JButton btnSearch = new JButton("Search");
-        btnSearch.addActionListener(new ActionListener() {
+        chckbxmntmArenas.setSelected(true);
+
+        chckbxmntmArenas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-
+                if(!chckbxmntmArenas.getState()) {
+                    chckbxmntmTournaments.setState(true);
+                    lblEnterText.setText("Enter tournament:");
+                }
+                else {
+                    chckbxmntmTournaments.setState(false);
+                    lblEnterText.setText("Enter arena:");
+                }
             }
         });
-		panel.add(btnSearch);
-		
-		Box horizontalBox = Box.createHorizontalBox();
-		panel.add(horizontalBox);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-	}
+
+        chckbxmntmTournaments.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(!chckbxmntmTournaments.getState()) {
+                    chckbxmntmArenas.setState(true);
+                    lblEnterText.setText("Enter arena:");
+                }
+                else {
+                    chckbxmntmArenas.setState(false);
+                    lblEnterText.setText("Enter tournament:");
+                }
+            }
+        });
+
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
+                System.out.println(result);
+            }
+        });
+
+        List<Arena> allArenas = arenaDAO.getAllArenas();
+        System.out.println(allArenas);
+    }
 
 	static void createNewAssociated() {
         EventQueue.invokeLater(new Runnable() {
