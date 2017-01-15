@@ -37,6 +37,16 @@ public class TournamentDAO {
         }
     }
 
+    public static Tournament convertRowToTournament(ResultSet resultSet) throws SQLException {
+
+        int id = resultSet.getInt("turneringsID");
+        String name = resultSet.getString("namn");
+        Date startdate = resultSet.getDate("start");
+        Date enddate = resultSet.getDate("slut");
+
+        return new Tournament(id, name, startdate, enddate);
+    }
+
     public List<Tournament> getAllTournaments() {
         List<Tournament> list = new ArrayList<>();
 
@@ -103,8 +113,8 @@ public class TournamentDAO {
             myRs = myStmt.executeQuery();
             myRs.next();
             Integer turneringsID = myRs.getInt("turneringsID");
-            myStmt = conn.prepareStatement("INSERT INTO Turneringsarena (turneringsID, arenanamn) VALUES (?, ?)");
-            myStmt.setString(1, turneringsID.toString());
+            myStmt = conn.prepareStatement("INSERT INTO Turneringsarena VALUES (?, ?)");
+            myStmt.setInt(1, turneringsID);
             myStmt.setString(2, arena);
             myStmt.executeUpdate();
 
@@ -114,15 +124,5 @@ public class TournamentDAO {
         } catch(SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Tournament convertRowToTournament(ResultSet resultSet) throws SQLException {
-
-        int id = resultSet.getInt("turneringsID");
-        String name = resultSet.getString("namn");
-        Date startdate = resultSet.getDate("start");
-        Date enddate = resultSet.getDate("slut");
-
-        return new Tournament(id, name, startdate, enddate);
     }
 }

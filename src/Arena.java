@@ -4,11 +4,11 @@ import java.sql.Date;
  * Created by Oscar on 17-01-14.
  */
 public class Arena {
-    private String name;
-    private String place;
-    private int size;
-    private Date builddate;
-    private boolean active;
+    private final String name;
+    private final String place;
+    private final int size;
+    private final Date builddate;
+    private final boolean active;
 
     Arena(String name, String place, int size, Date builddate, boolean active) {
         this.name = name;
@@ -22,40 +22,20 @@ public class Arena {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPlace() {
         return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
     }
 
     public int getSize() {
         return size;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-
     public Date getBuilddate() {
         return builddate;
     }
 
-    public void setBuilddate(Date builddate) {
-        this.builddate = builddate;
-    }
-
     public boolean isActive() {
         return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     @Override

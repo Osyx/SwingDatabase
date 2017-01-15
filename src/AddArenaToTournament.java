@@ -1,18 +1,12 @@
-import java.awt.BorderLayout;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 
-public class AddArenaToTournament extends JFrame {
+class AddArenaToTournament extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField arenaField;
-	private JTextField tourField;
-    private JFrame currentFrame;
-    private TournamentDAO tournamentDAO;
+    private final JTextField arenaField;
+	private final JTextField tourField;
+    private final TournamentDAO tournamentDAO;
 
 	/**
 	 * Create the frame.
@@ -30,8 +24,7 @@ public class AddArenaToTournament extends JFrame {
         JPanel panel_1 = new JPanel();
         JButton btnCreate = new JButton("Create");
 
-        contentPane = new JPanel();
-        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
+        JPanel contentPane = new JPanel();
         arenaField = new JTextField();
         tourField = new JTextField();
 
@@ -58,15 +51,13 @@ public class AddArenaToTournament extends JFrame {
         panel_1.add(btnCreate);
         panel.setLayout(new GridLayout(2, 2, 0, 0));
 
-        btnCreate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String arenaLink = arenaField.getText();
-                String tournamentLink = tourField.getText();
-                tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
-                arenaField.setText("");
-                tourField.setText("");
-                JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
-            }
+        btnCreate.addActionListener(e -> {
+            String arenaLink = arenaField.getText();
+            String tournamentLink = tourField.getText();
+            tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
+            arenaField.setText("");
+            tourField.setText("");
+            JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
         });
 	}
 
