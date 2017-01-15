@@ -1,8 +1,6 @@
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -34,27 +32,28 @@ public class ShowAssociated extends JFrame {
 	 */
 	public ShowAssociated() {
         setTitle("Associated tournaments:");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+
+        JPanel panel = new JPanel();
+        JButton btnClose = new JButton("Close");
+
 		contentPane = new JPanel();
+        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		
+        contentPane.add(panel, BorderLayout.CENTER);
+        contentPane.add(btnClose, BorderLayout.SOUTH);
 		table = new JTable();
+
+        setContentPane(contentPane);
 		panel.add(table);
-		
-		JButton btnClose = new JButton("Close");
+
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
                 currentFrame.dispose();
 			}
 		});
-		contentPane.add(btnClose, BorderLayout.SOUTH);
 	}
 
 }

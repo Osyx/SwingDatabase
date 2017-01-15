@@ -14,7 +14,7 @@ public class TournamentDAO {
     TournamentDAO() {
 
         // DB access variables
-        String URL = "jdbc:ucanaccess://src/TheProject.accdb";
+        String URL = "jdbc:ucanaccess://src/TheProject1.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";

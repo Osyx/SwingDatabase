@@ -14,7 +14,7 @@ public class ArenaDAO {
     ArenaDAO() {
 
         // DB access variables
-        String URL = "jdbc:ucanaccess://src/TheProject.accdb";
+        String URL = "jdbc:ucanaccess://src/TheProject1.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
@@ -101,7 +101,7 @@ public class ArenaDAO {
         return new Arena(name, place, size, builddate, active);
     }
 
-    public void insertArena() throws Exception {
+    public void insertArena(String arenaName, String location, String size, String buildDate, boolean active) throws Exception {
         // Local variables
         String query;
         PreparedStatement stmt;
@@ -117,23 +117,23 @@ public class ArenaDAO {
         // Ask the user to specify a value for förnamn.
         System.out.print("Ange arenanamnet: ");
         // Retrieve the value and place it in the variable arenanamn.
-        arenanamn = in.nextLine();
+        arenanamn = arenaName;
         // Ask the user to specify a value for efternamn.
         System.out.print("Ange dess plats: ");
         // Retrieve the value and place it in the variable plats.
-        plats = in.nextLine();
+        plats = location;
         // Ask the user to specify a value for storlek.
         System.out.print("Ange storleken: ");
         // Retrieve the value and place it in the variable storlek.
-        storlek = in.nextLine();
+        storlek = size;
         // Ask the user to specify a value for byggdatum.
         System.out.print("Ange byggdatumet: ");
         // Retrieve the value and place it in the variable byggdatum.
-        byggdatum = in.nextLine();
+        byggdatum = buildDate;
         // Ask the user to specify a value for stad.
         System.out.print("Ange om den ar aktiv: ");
         // Retrieve the value and place it in the variable aktiv.
-        aktiv = in.nextBoolean();
+        aktiv = active;
 
         // Set the SQL statement into the query variable
         query = "INSERT INTO Arena (namn, plats, storlek, byggdatum, aktiv) VALUES (?, ?, ?, ?, ?)";
@@ -163,7 +163,7 @@ public class ArenaDAO {
 
         ArenaDAO dao = new ArenaDAO();
         System.out.println(dao.searchArenaTournaments("Camp Nou"));
-        dao.insertArena();
+        dao.insertArena("Stadium General", "Stockholm", "50", "2013-03-10", true);
         System.out.println(dao.getAllArenas());
     }
 }

@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class allSportTV_GUI extends JFrame {
 
@@ -14,8 +14,8 @@ public class allSportTV_GUI extends JFrame {
 	private JTextField arenaNameTextField;
 	private JTable table;
 	private JFrame currentFrame;
-	private ArenaDAO arenaDAO;
-	private TournamentDAO tournamentDAO;
+	private static ArenaDAO arenaDAO;
+	private static TournamentDAO tournamentDAO;
 
 	/**
 	 * Launch the application.
@@ -52,71 +52,156 @@ public class allSportTV_GUI extends JFrame {
 		setTitle("AllSportTV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 638, 306);
-		currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnSearch = new JMenu("Search");
-		menuBar.add(mnSearch);
-		
-		JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
-		chckbxmntmArenas.setSelected(true);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu mnSearch = new JMenu("Search");
+        JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
+        JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
+        JMenu mnCreate = new JMenu("Create");
+        JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
+        JMenuItem mntmAddArenaToTournament = new JMenuItem("Add arena to tournament");
+        JPanel panel = new JPanel();
+        FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+        JLabel lblEnterText = new JLabel("Enter arena:");
+        JButton btnSearch = new JButton("Search");
+        Box horizontalBox = Box.createHorizontalBox();
+        JScrollPane scrollPane = new JScrollPane();
+
+        contentPane = new JPanel();
+        currentFrame = (JFrame) SwingUtilities.getAncestorOfClass(JFrame.class, contentPane);
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout(0, 0));
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+        contentPane.add(panel, BorderLayout.NORTH);
+        arenaNameTextField = new JTextField();
+        arenaNameTextField.setColumns(10);
+        table = new JTable();
+
+        setContentPane(contentPane);
+        setJMenuBar(menuBar);
+        scrollPane.setViewportView(table);
+        chckbxmntmArenas.setSelected(true);
+        flowLayout.setAlignment(FlowLayout.LEFT);
+        panel.add(lblEnterText);
+        panel.add(arenaNameTextField);
+        panel.add(btnSearch);
+        panel.add(horizontalBox);
+        menuBar.add(mnSearch);
 		mnSearch.add(chckbxmntmArenas);
-		
-		JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
 		mnSearch.add(chckbxmntmTournaments);
-		
-		JMenu mnCreate = new JMenu("Create");
 		menuBar.add(mnCreate);
-		
-		JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
 		mnCreate.add(mntmCreateNewArena);
-		
-		JMenuItem mntmAddArenaTo = new JMenuItem("Add arena to tournament");
-		mnCreate.add(mntmAddArenaTo);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-		
-		JPanel panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		contentPane.add(panel, BorderLayout.NORTH);
-		
-		JLabel lblEnterArena = new JLabel("Enter arena");
-		panel.add(lblEnterArena);
-		
-		arenaNameTextField = new JTextField();
-		panel.add(arenaNameTextField);
-		arenaNameTextField.setColumns(10);
-		
-		JButton btnSearch = new JButton("Search");
-        btnSearch.addActionListener(new ActionListener() {
+		mnCreate.add(mntmAddArenaToTournament);
+
+        chckbxmntmArenas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-
+                if(!chckbxmntmArenas.getState()) {
+                    chckbxmntmTournaments.setState(true);
+                    lblEnterText.setText("Enter tournament:");
+                    btnSearch.doClick();
+                }
+                else {
+                    chckbxmntmTournaments.setState(false);
+                    lblEnterText.setText("Enter arena:");
+                    btnSearch.doClick();
+                }
             }
         });
-		panel.add(btnSearch);
-		
-		Box horizontalBox = Box.createHorizontalBox();
-		panel.add(horizontalBox);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-	}
+
+        chckbxmntmTournaments.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(!chckbxmntmTournaments.getState()) {
+                    chckbxmntmArenas.setState(true);
+                    lblEnterText.setText("Enter arena:");
+                    btnSearch.doClick();
+                }
+                else {
+                    chckbxmntmArenas.setState(false);
+                    lblEnterText.setText("Enter tournament:");
+                    btnSearch.doClick();
+                }
+            }
+        });
+
+
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(lblEnterText.getText().contains("tournament")) {
+                    if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
+                        List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
+                        TournamentTableModel tournamentTableModel = new TournamentTableModel(allTournaments);
+                        table.setModel(tournamentTableModel);
+                    } else {
+                        List<Arena> result = tournamentDAO.searchTournamentArenas(arenaNameTextField.getText());
+
+                        ArenaTableModel arenaTableModel = new ArenaTableModel(result);
+                        table.setModel(arenaTableModel);
+                    }
+                } else {
+                    if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
+                        List<Arena> allArenas = arenaDAO.getAllArenas();
+                        ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
+                        table.setModel(arenaTableModel);
+                    } else {
+                        List<Tournament> result = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
+
+                        TournamentTableModel tournamentTableModel = new TournamentTableModel(result);
+                        table.setModel(tournamentTableModel);
+                    }
+                }
+            }
+        });
+
+        mntmCreateNewArena.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createNewCreateArena();
+            }
+        });
+
+        mntmAddArenaToTournament.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createNewAddArenaToTournament();
+            }
+        });
+
+        List<Arena> allArenas = arenaDAO.getAllArenas();
+        ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
+        table.setModel(arenaTableModel);
+
+    }
 
 	static void createNewAssociated() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    ShowAssociated frame2 = new ShowAssociated();
-                    frame2.setVisible(true);
+                    ShowAssociated frame = new ShowAssociated();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    static void createNewCreateArena() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    CreateArena frame = new CreateArena(arenaDAO);
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    static void createNewAddArenaToTournament() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO);
+                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
