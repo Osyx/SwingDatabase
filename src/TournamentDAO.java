@@ -113,8 +113,8 @@ public class TournamentDAO {
             myRs = myStmt.executeQuery();
             myRs.next();
             Integer turneringsID = myRs.getInt("turneringsID");
-            myStmt = conn.prepareStatement("INSERT INTO Turneringsarena (turneringsID, arenanamn) VALUES (?, ?)");
-            myStmt.setString(1, turneringsID.toString());
+            myStmt = conn.prepareStatement("INSERT INTO Turneringsarena VALUES (?, ?)");
+            myStmt.setInt(1, turneringsID);
             myStmt.setString(2, arena);
             myStmt.executeUpdate();
 
