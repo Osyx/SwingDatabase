@@ -1,9 +1,7 @@
 import java.sql.Date;
 
-/**
- * Created by Oscar on 17-01-14.
- */
 public class Arena {
+
     private final String name;
     private final String place;
     private final int size;

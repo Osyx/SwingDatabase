@@ -1,17 +1,15 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-/**
- * Created by Oscar on 17-01-15.
- */
 class ArenaTableModel extends AbstractTableModel {
+
     private static final int NAME_COL = 0;
     private static final int LOCATION_COL = 1;
     private static final int SIZE_COL = 2;
     private static final int BUILD_DATE_COL = 3;
     private static final int ACTIVE_COL = 4;
 
-    private final String[] columnNames = { "Name", "Location", "Size", "Build Date", "Active" };
+    private final String[] columnNames = {"Name", "Location", "Size", "Build Date", "Active"};
     private final List<Arena> arenas;
 
     public ArenaTableModel(List<Arena> theArenas) {

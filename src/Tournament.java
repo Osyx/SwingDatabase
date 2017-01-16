@@ -1,8 +1,5 @@
 import java.sql.Date;
 
-/**
- * Created by Oscar on 17-01-14.
- */
 public class Tournament {
     private final int id;
     private final String name;

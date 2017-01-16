@@ -1,15 +1,13 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-/**
- * Created by Oscar on 17-01-15.
- */
 class TournamentTableModel extends AbstractTableModel {
+
     private static final int NAME_COL = 0;
     private static final int START_COL = 1;
     private static final int END_COL = 2;
 
-    private final String[] columnNames = { "Name", "Start date", "End date" };
+    private final String[] columnNames = {"Name", "Start date", "End date"};
     private final List<Tournament> tournaments;
 
     public TournamentTableModel(List<Tournament> theTournaments) {

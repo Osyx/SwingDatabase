@@ -5,20 +5,20 @@ import java.awt.*;
 class AddArenaToTournament extends JFrame {
 
     private final JTextField arenaField;
-	private final JTextField tourField;
+    private final JTextField tourField;
     private final TournamentDAO tournamentDAO;
 
-	/**
-	 * Create the frame.
-	 */
-	public AddArenaToTournament(TournamentDAO newTournamentDAO) {
+    /**
+     * Create the frame.
+     */
+    public AddArenaToTournament(TournamentDAO newTournamentDAO) {
         this.tournamentDAO = newTournamentDAO;
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 143);
-		
-		JPanel panel = new JPanel();
-		JLabel lblArena = new JLabel("Arena:");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(100, 100, 450, 143);
+
+        JPanel panel = new JPanel();
+        JLabel lblArena = new JLabel("Arena:");
         JLabel lblTournament = new JLabel("Tournament:");
         JLabel lblAddAArena = new JLabel("Add a arena to a tournament");
         JPanel panel_1 = new JPanel();
@@ -44,10 +44,10 @@ class AddArenaToTournament extends JFrame {
         contentPane.add(panel_1, BorderLayout.SOUTH);
 
         setContentPane(contentPane);
-		panel.add(lblArena);
-		panel.add(lblTournament);
-		panel.add(arenaField);
-		panel.add(tourField);
+        panel.add(lblArena);
+        panel.add(lblTournament);
+        panel.add(arenaField);
+        panel.add(tourField);
         panel_1.add(btnCreate);
         panel.setLayout(new GridLayout(2, 2, 0, 0));
 
@@ -59,6 +59,6 @@ class AddArenaToTournament extends JFrame {
             tourField.setText("");
             JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
         });
-	}
+    }
 
 }
