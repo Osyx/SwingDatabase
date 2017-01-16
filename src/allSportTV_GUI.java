@@ -6,24 +6,25 @@ import java.util.List;
 class allSportTV_GUI extends JFrame {
 
     private final JTextField arenaNameTextField;
-	private final JTable table;
+    private final JTable table;
     private final ArenaDAO arenaDAO;
-	private final TournamentDAO tournamentDAO;
+    private final TournamentDAO tournamentDAO;
 
-	/**
-	 * Create the frame.
-	 */
+    /**
+     * Create the frame.
+     */
     private allSportTV_GUI() {
 
-	    this.arenaDAO = new ArenaDAO();
-	    this.tournamentDAO = new TournamentDAO();
+        this.arenaDAO = new ArenaDAO();
+        this.tournamentDAO = new TournamentDAO();
 
-		setTitle("AllSportTV");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setBounds(100, 100, 638, 306);
+        setTitle("AllSportTV");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setBounds(100, 100, 638, 306);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu mnSearch = new JMenu("Search");
+        JLabel lblEmptySearchTo = new JLabel("Empty search to show all arenas again.");
         JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
         JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
         JMenu mnCreate = new JMenu("Create");
@@ -53,43 +54,46 @@ class allSportTV_GUI extends JFrame {
         panel.add(lblEnterText);
         panel.add(arenaNameTextField);
         panel.add(btnSearch);
+        panel.add(lblEmptySearchTo);
         panel.add(horizontalBox);
         menuBar.add(mnSearch);
-		mnSearch.add(chckbxmntmArenas);
-		mnSearch.add(chckbxmntmTournaments);
-		menuBar.add(mnCreate);
-		mnCreate.add(mntmCreateNewArena);
-		mnCreate.add(mntmAddArenaToTournament);
+        mnSearch.add(chckbxmntmArenas);
+        mnSearch.add(chckbxmntmTournaments);
+        menuBar.add(mnCreate);
+        mnCreate.add(mntmCreateNewArena);
+        mnCreate.add(mntmAddArenaToTournament);
 
         chckbxmntmArenas.addActionListener(e -> {
-            if(!chckbxmntmArenas.getState()) {
+            if (!chckbxmntmArenas.getState()) {
                 chckbxmntmTournaments.setState(true);
                 lblEnterText.setText("Enter tournament:");
+                lblEmptySearchTo.setText("Empty search to show all tournaments again.");
                 btnSearch.doClick();
-            }
-            else {
+            } else {
                 chckbxmntmTournaments.setState(false);
                 lblEnterText.setText("Enter arena:");
+                lblEmptySearchTo.setText("Empty search to show all arenas again.");
                 btnSearch.doClick();
             }
         });
 
         chckbxmntmTournaments.addActionListener(e -> {
-            if(!chckbxmntmTournaments.getState()) {
+            if (!chckbxmntmTournaments.getState()) {
                 chckbxmntmArenas.setState(true);
                 lblEnterText.setText("Enter arena:");
+                lblEmptySearchTo.setText("Empty search to show all arenas again.");
                 btnSearch.doClick();
-            }
-            else {
+            } else {
                 chckbxmntmArenas.setState(false);
                 lblEnterText.setText("Enter tournament:");
+                lblEmptySearchTo.setText("Empty search to show all tournaments again.");
                 btnSearch.doClick();
             }
         });
 
 
         btnSearch.addActionListener(e -> {
-            if(lblEnterText.getText().contains("tournament")) {
+            if (lblEnterText.getText().contains("tournament")) {
                 if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
                     List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
                     TournamentTableModel tournamentTableModel = new TournamentTableModel(allTournaments);
@@ -124,19 +128,18 @@ class allSportTV_GUI extends JFrame {
 
     }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		EventQueue.invokeLater(() -> {
+        EventQueue.invokeLater(() -> {
             try {
                 allSportTV_GUI frame = new allSportTV_GUI();
                 frame.setVisible(true);
@@ -144,7 +147,7 @@ class allSportTV_GUI extends JFrame {
                 e.printStackTrace();
             }
         });
-	}
+    }
 
     private void createNewCreateArena() {
         EventQueue.invokeLater(() -> {

@@ -18,9 +18,8 @@ class TournamentDAO {
             conn = DriverManager.getConnection(URL, userID, password);
             conn.setAutoCommit(false);
 
-            System.out.println("Connected to " + URL + " using "+ driver);
-        }
-        catch (Exception e) {
+            System.out.println("TournamentDAO connected to " + URL + " using " + driver);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -45,7 +44,7 @@ class TournamentDAO {
             myStmt = conn.createStatement();
             myRs = myStmt.executeQuery("SELECT * FROM Turnering ORDER BY namn ASC");
 
-            while(myRs.next()) {
+            while (myRs.next()) {
                 list.add(convertRowToTournament(myRs));
             }
 
@@ -54,8 +53,8 @@ class TournamentDAO {
 
             return list;
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
         }
         return null;
     }
@@ -71,7 +70,7 @@ class TournamentDAO {
             myStmt.setString(1, tournament);
             myRs = myStmt.executeQuery();
 
-            while(myRs.next()) {
+            while (myRs.next()) {
                 list.add(ArenaDAO.convertRowToArena(myRs));
             }
 
@@ -80,8 +79,8 @@ class TournamentDAO {
 
             return list;
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
         }
         return null;
     }
@@ -106,8 +105,8 @@ class TournamentDAO {
             myRs.close();
             conn.commit();
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
         }
     }
 }

@@ -18,9 +18,8 @@ class ArenaDAO {
             conn = DriverManager.getConnection(URL, userID, password);
             conn.setAutoCommit(false);
 
-            System.out.println("Connected to " + URL + " using "+ driver);
-        }
-        catch (Exception e) {
+            System.out.println("ArenaDAO connected to " + URL + " using " + driver);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -46,7 +45,7 @@ class ArenaDAO {
             myStmt = conn.createStatement();
             myRs = myStmt.executeQuery("SELECT * FROM Arena ORDER BY namn ASC");
 
-            while(myRs.next()) {
+            while (myRs.next()) {
                 list.add(convertRowToArena(myRs));
             }
 
@@ -55,8 +54,8 @@ class ArenaDAO {
 
             return list;
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
         }
 
         return null;
@@ -73,7 +72,7 @@ class ArenaDAO {
             myStmt.setString(1, arena);
             myRs = myStmt.executeQuery();
 
-            while(myRs.next()) {
+            while (myRs.next()) {
                 list.add(TournamentDAO.convertRowToTournament(myRs));
             }
 
@@ -82,8 +81,8 @@ class ArenaDAO {
 
             return list;
 
-        } catch(SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
         }
 
         return null;
@@ -105,16 +104,22 @@ class ArenaDAO {
         aktiv = active;
 
         query = "INSERT INTO Arena (namn, plats, storlek, byggdatum, aktiv) VALUES (?, ?, ?, ?, ?)";
-        stmt = conn.prepareStatement(query);
 
-        stmt.setString(1, arenanamn);
-        stmt.setString(2, plats);
-        stmt.setString(3, storlek);
-        stmt.setDate(4, java.sql.Date.valueOf(byggdatum));
-        stmt.setBoolean(5, aktiv);
+        try {
+            stmt = conn.prepareStatement(query);
 
-        stmt.executeUpdate();
-        stmt.close();
-        conn.commit();
+            stmt.setString(1, arenanamn);
+            stmt.setString(2, plats);
+            stmt.setString(3, storlek);
+            stmt.setDate(4, java.sql.Date.valueOf(byggdatum));
+            stmt.setBoolean(5, aktiv);
+
+            stmt.executeUpdate();
+            stmt.close();
+            conn.commit();
+
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
+        }
     }
 }

@@ -7,7 +7,7 @@ class TournamentTableModel extends AbstractTableModel {
     private static final int START_COL = 1;
     private static final int END_COL = 2;
 
-    private final String[] columnNames = { "Name", "Start date", "End date" };
+    private final String[] columnNames = {"Name", "Start date", "End date"};
     private final List<Tournament> tournaments;
 
     public TournamentTableModel(List<Tournament> theTournaments) {
