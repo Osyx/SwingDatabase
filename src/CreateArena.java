@@ -101,8 +101,5 @@ class CreateArena extends JFrame {
                 txtEnterLocation.selectAll();
             }
         });
-
-
 	}
-
 }

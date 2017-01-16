@@ -2,34 +2,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Oscar on 17-01-14.
- */
-@SuppressWarnings("ALL")
 public class TournamentDAO {
 
-    // DB connection variable
     static protected Connection conn;
 
     TournamentDAO() {
-
-        // DB access variables
         String URL = "jdbc:ucanaccess://src/TheProject.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
 
-        // method for establishing a DB connection
         try {
-            // register the driver with DriverManager
             Class.forName(driver);
-            //create a connection to the database
+
             conn = DriverManager.getConnection(URL, userID, password);
-            // Set the auto commit of the connection to false.
-            // An explicit commit will be required in order to accept
-            // any changes done to the DB through this connection.
             conn.setAutoCommit(false);
-            //Some logging
+
             System.out.println("Connected to " + URL + " using "+ driver);
         }
         catch (Exception e) {
@@ -69,7 +57,6 @@ public class TournamentDAO {
         } catch(SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -96,7 +83,6 @@ public class TournamentDAO {
         } catch(SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -107,7 +93,6 @@ public class TournamentDAO {
         ResultSet myRs = null;
 
         try {
-
             myStmt = conn.prepareStatement("SELECT turneringsID FROM Turnering WHERE namn = ?");
             myStmt.setString(1, tournament);
             myRs = myStmt.executeQuery();
@@ -120,6 +105,7 @@ public class TournamentDAO {
 
             myStmt.close();
             myRs.close();
+            conn.commit();
 
         } catch(SQLException e) {
             e.printStackTrace();

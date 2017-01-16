@@ -2,34 +2,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Oscar on 17-01-14.
- */
-@SuppressWarnings("ALL")
 public class ArenaDAO {
 
-    // DB connection variable
     static protected Connection conn;
 
     ArenaDAO() {
-
-        // DB access variables
         String URL = "jdbc:ucanaccess://src/TheProject.accdb";
         String driver = "net.ucanaccess.jdbc.UcanaccessDriver";
         String userID = "";
         String password = "";
 
-        // method for establishing a DB connection
         try {
-            // register the driver with DriverManager
             Class.forName(driver);
-            //create a connection to the database
+
             conn = DriverManager.getConnection(URL, userID, password);
-            // Set the auto commit of the connection to false.
-            // An explicit commit will be required in order to accept
-            // any changes done to the DB through this connection.
             conn.setAutoCommit(false);
-            //Some logging
+
             System.out.println("Connected to " + URL + " using "+ driver);
         }
         catch (Exception e) {
@@ -102,7 +90,6 @@ public class ArenaDAO {
     }
 
     public void insertArena(String arenaName, String location, String size, String buildDate, boolean active) throws Exception {
-        // Local variables
         String query;
         PreparedStatement stmt;
         String arenanamn;
@@ -117,27 +104,17 @@ public class ArenaDAO {
         byggdatum = buildDate;
         aktiv = active;
 
-        // Set the SQL statement into the query variable
         query = "INSERT INTO Arena (namn, plats, storlek, byggdatum, aktiv) VALUES (?, ?, ?, ?, ?)";
-
-        // Create a statement associated to the connection and the query.
-        // The new statement is placed in the variable stmt.
         stmt = conn.prepareStatement(query);
 
-        // Provide the values for the ?'s in the SQL statement.
-        // The value of the variable arenanamn is the first,
-        // plats is second, storlek is third, byggdatum is forth
-        // and aktiv is fifth
         stmt.setString(1, arenanamn);
         stmt.setString(2, plats);
         stmt.setString(3, storlek);
         stmt.setDate(4, java.sql.Date.valueOf(byggdatum));
         stmt.setBoolean(5, aktiv);
 
-        // Execute the SQL statement that is prepared in the variable stmt
         stmt.executeUpdate();
-
-        // Close the variable stmt and release all resources bound to it
         stmt.close();
+        conn.commit();
     }
 }
