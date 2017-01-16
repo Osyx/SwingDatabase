@@ -3,7 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
-class allSportTV_GUI extends JFrame {
+class AllSportTV_GUI extends JFrame {
 
     private final JTextField arenaNameTextField;
     private final JTable table;
@@ -13,7 +13,7 @@ class allSportTV_GUI extends JFrame {
     /**
      * Create the frame.
      */
-    private allSportTV_GUI() {
+    private AllSportTV_GUI() {
 
         this.arenaDAO = new ArenaDAO();
         this.tournamentDAO = new TournamentDAO();
@@ -141,7 +141,7 @@ class allSportTV_GUI extends JFrame {
 
         EventQueue.invokeLater(() -> {
             try {
-                allSportTV_GUI frame = new allSportTV_GUI();
+                AllSportTV_GUI frame = new AllSportTV_GUI();
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
