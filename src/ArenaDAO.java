@@ -2,9 +2,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArenaDAO {
+class ArenaDAO {
 
-    static protected Connection conn;
+    private static Connection conn;
 
     ArenaDAO() {
         String URL = "jdbc:ucanaccess://src/TheProject.accdb";
@@ -39,8 +39,8 @@ public class ArenaDAO {
     public List<Arena> getAllArenas() {
         List<Arena> list = new ArrayList<>();
 
-        Statement myStmt = null;
-        ResultSet myRs = null;
+        Statement myStmt;
+        ResultSet myRs;
 
         try {
             myStmt = conn.createStatement();
@@ -65,8 +65,8 @@ public class ArenaDAO {
     public List<Tournament> searchArenaTournaments(String arena) {
         List<Tournament> list = new ArrayList<>();
 
-        PreparedStatement myStmt = null;
-        ResultSet myRs = null;
+        PreparedStatement myStmt;
+        ResultSet myRs;
 
         try {
             myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY namn ASC");
