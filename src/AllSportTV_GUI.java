@@ -1,3 +1,5 @@
+import javafx.scene.control.ComboBox;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -5,7 +7,7 @@ import java.util.List;
 
 class AllSportTV_GUI extends JFrame {
 
-    private final JTextField arenaNameTextField;
+    //private final JTextField arenaNameTextField;
     private final JTable table;
     private final ArenaDAO arenaDAO;
     private final TournamentDAO tournamentDAO;
@@ -24,26 +26,24 @@ class AllSportTV_GUI extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu mnSearch = new JMenu("Search");
-        JLabel lblEmptySearchTo = new JLabel("Empty search to show all arenas again.");
-        JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Arenas");
-        JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Tournaments");
+        JCheckBoxMenuItem chckbxmntmArenas = new JCheckBoxMenuItem("Tournaments at");
+        JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Hosting arenas");
         JMenu mnCreate = new JMenu("Create");
         JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
         JMenuItem mntmAddArenaToTournament = new JMenuItem("Add arena to tournament");
         JPanel panel = new JPanel();
         FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-        JLabel lblEnterText = new JLabel("Enter arena:");
+        JLabel lblEnterText = new JLabel("Show tournaments taking place at:");
         JButton btnSearch = new JButton("Search");
         Box horizontalBox = Box.createHorizontalBox();
         JScrollPane scrollPane = new JScrollPane();
+        JComboBox<String> comboBox = new JComboBox<>();
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         contentPane.add(scrollPane, BorderLayout.CENTER);
         contentPane.add(panel, BorderLayout.NORTH);
-        arenaNameTextField = new JTextField();
-        arenaNameTextField.setColumns(10);
         table = new JTable();
 
         setContentPane(contentPane);
@@ -51,10 +51,10 @@ class AllSportTV_GUI extends JFrame {
         scrollPane.setViewportView(table);
         chckbxmntmArenas.setSelected(true);
         flowLayout.setAlignment(FlowLayout.LEFT);
+
         panel.add(lblEnterText);
-        panel.add(arenaNameTextField);
+        panel.add(comboBox);
         panel.add(btnSearch);
-        panel.add(lblEmptySearchTo);
         panel.add(horizontalBox);
         menuBar.add(mnSearch);
         mnSearch.add(chckbxmntmArenas);
@@ -66,55 +66,38 @@ class AllSportTV_GUI extends JFrame {
         chckbxmntmArenas.addActionListener(e -> {
             if (!chckbxmntmArenas.getState()) {
                 chckbxmntmTournaments.setState(true);
-                lblEnterText.setText("Enter tournament:");
-                lblEmptySearchTo.setText("Empty search to show all tournaments again.");
-                btnSearch.doClick();
+                lblEnterText.setText("Show arenas hosting:");
+                changeDropdown("Tournament", comboBox);
             } else {
                 chckbxmntmTournaments.setState(false);
-                lblEnterText.setText("Enter arena:");
-                lblEmptySearchTo.setText("Empty search to show all arenas again.");
-                btnSearch.doClick();
+                lblEnterText.setText("Show tournaments taking place at:");
+                changeDropdown("Arena", comboBox);
             }
         });
 
         chckbxmntmTournaments.addActionListener(e -> {
             if (!chckbxmntmTournaments.getState()) {
                 chckbxmntmArenas.setState(true);
-                lblEnterText.setText("Enter arena:");
-                lblEmptySearchTo.setText("Empty search to show all arenas again.");
-                btnSearch.doClick();
+                lblEnterText.setText("Show tournaments taking place at:");
+                changeDropdown("Arena", comboBox);
             } else {
                 chckbxmntmArenas.setState(false);
-                lblEnterText.setText("Enter tournament:");
-                lblEmptySearchTo.setText("Empty search to show all tournaments again.");
-                btnSearch.doClick();
+                lblEnterText.setText("Show arenas hosting:");
+                changeDropdown("Tournament", comboBox);
             }
         });
 
 
         btnSearch.addActionListener(e -> {
-            if (lblEnterText.getText().contains("tournament")) {
-                if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
-                    List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
-                    TournamentTableModel tournamentTableModel = new TournamentTableModel(allTournaments);
-                    table.setModel(tournamentTableModel);
-                } else {
-                    List<Arena> tournamentArenas = tournamentDAO.searchTournamentArenas(arenaNameTextField.getText());
+            if (lblEnterText.getText().contains("arenas")) {
+                List<Arena> tournamentArenas = tournamentDAO.searchTournamentArenas(comboBox.getSelectedItem().toString());
+                ArenaTableModel arenaTableModel = new ArenaTableModel(tournamentArenas);
+                table.setModel(arenaTableModel);
 
-                    ArenaTableModel arenaTableModel = new ArenaTableModel(tournamentArenas);
-                    table.setModel(arenaTableModel);
-                }
             } else {
-                if (arenaNameTextField.getText().isEmpty() || arenaNameTextField.getText().trim().length() < 1) {
-                    List<Arena> allArenas = arenaDAO.getAllArenas();
-                    ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
-                    table.setModel(arenaTableModel);
-                } else {
-                    List<Tournament> searchArenaTournaments = arenaDAO.searchArenaTournaments(arenaNameTextField.getText());
-
-                    TournamentTableModel tournamentTableModel = new TournamentTableModel(searchArenaTournaments);
-                    table.setModel(tournamentTableModel);
-                }
+                List<Tournament> searchArenaTournaments = arenaDAO.searchArenaTournaments(comboBox.getSelectedItem().toString());
+                TournamentTableModel tournamentTableModel = new TournamentTableModel(searchArenaTournaments);
+                table.setModel(tournamentTableModel);
             }
         });
 
@@ -123,8 +106,17 @@ class AllSportTV_GUI extends JFrame {
         mntmAddArenaToTournament.addActionListener(e -> createNewAddArenaToTournament());
 
         List<Arena> allArenas = arenaDAO.getAllArenas();
-        ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
-        table.setModel(arenaTableModel);
+        String[] arenaSList = new String[allArenas.size()];
+        int i = 0;
+        for (Arena a : allArenas) {
+            arenaSList[i] = a.getName();
+            i++;
+        }
+        //ArenaTableModel arenaTableModel = new ArenaTableModel(allArenas);
+        //table.setModel(arenaTableModel);
+        comboBox.setModel(new DefaultComboBoxModel<>(arenaSList));
+
+
 
     }
 
@@ -163,12 +155,34 @@ class AllSportTV_GUI extends JFrame {
     private void createNewAddArenaToTournament() {
         EventQueue.invokeLater(() -> {
             try {
-                AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO);
+                AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO, this);
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    void changeDropdown(String s, JComboBox<String> comboBox) {
+        if(s.equals("Arena")) {
+            List<Arena> allArenas = arenaDAO.getAllArenas();
+            String[] arenaSList = new String[allArenas.size()];
+            int i = 0;
+            for (Arena a : allArenas) {
+                arenaSList[i] = a.getName();
+                i++;
+            }
+            comboBox.setModel(new DefaultComboBoxModel<>(arenaSList));
+        } else {
+            List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
+            String[] tournamentSList = new String[allTournaments.size()];
+            int i = 0;
+            for (Tournament a : allTournaments) {
+                tournamentSList[i] = a.getName();
+                i++;
+            }
+            comboBox.setModel(new DefaultComboBoxModel<>(tournamentSList));
+        }
     }
 
 }
