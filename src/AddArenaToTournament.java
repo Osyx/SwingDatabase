@@ -4,14 +4,12 @@ import java.awt.*;
 
 class AddArenaToTournament extends JFrame {
 
-    private final JTextField arenaField;
-    private final JTextField tourField;
     private final TournamentDAO tournamentDAO;
 
     /**
      * Create the frame.
      */
-    public AddArenaToTournament(TournamentDAO newTournamentDAO) {
+    AddArenaToTournament(TournamentDAO newTournamentDAO, AllSportTV_GUI allSportTV_gui) {
         this.tournamentDAO = newTournamentDAO;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -25,16 +23,12 @@ class AddArenaToTournament extends JFrame {
         JButton btnCreate = new JButton("Create");
 
         JPanel contentPane = new JPanel();
-        arenaField = new JTextField();
-        tourField = new JTextField();
+        JComboBox<String> arenaField = new JComboBox<>();
+        JComboBox<String> tourField = new JComboBox<>();
 
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        arenaField.setColumns(10);
-        tourField.setColumns(10);
 
-        arenaField.setHorizontalAlignment(SwingConstants.CENTER);
-        tourField.setHorizontalAlignment(SwingConstants.CENTER);
         lblArena.setHorizontalAlignment(SwingConstants.CENTER);
         lblTournament.setHorizontalAlignment(SwingConstants.CENTER);
         lblAddAArena.setHorizontalAlignment(SwingConstants.CENTER);
@@ -51,12 +45,13 @@ class AddArenaToTournament extends JFrame {
         panel_1.add(btnCreate);
         panel.setLayout(new GridLayout(2, 2, 0, 0));
 
+        allSportTV_gui.changeDropdown("Arena", arenaField);
+        allSportTV_gui.changeDropdown("Tournament", tourField);
+
         btnCreate.addActionListener(e -> {
-            String arenaLink = arenaField.getText();
-            String tournamentLink = tourField.getText();
+            String arenaLink = arenaField.getSelectedItem().toString();
+            String tournamentLink = tourField.getSelectedItem().toString();
             tournamentDAO.linkArenaAndTournament(arenaLink, tournamentLink);
-            arenaField.setText("");
-            tourField.setText("");
             JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournamentLink);
         });
     }
