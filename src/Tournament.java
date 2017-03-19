@@ -13,6 +13,10 @@ public class Tournament {
         this.enddate = enddate;
     }
 
+    public int getID() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

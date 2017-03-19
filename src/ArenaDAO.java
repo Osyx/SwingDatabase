@@ -68,7 +68,34 @@ class ArenaDAO {
         ResultSet myRs;
 
         try {
-            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY namn ASC");
+            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY turneringsID ASC");
+            myStmt.setString(1, arena);
+            myRs = myStmt.executeQuery();
+
+            while (myRs.next()) {
+                list.add(TournamentDAO.convertRowToTournament(myRs));
+            }
+
+            myStmt.close();
+            myRs.close();
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
+        }
+
+        return null;
+    }
+
+    public List<Tournament> searchCurrentArenaTournaments(String arena) {
+        List<Tournament> list = new ArrayList<>();
+
+        PreparedStatement myStmt;
+        ResultSet myRs;
+
+        try {
+            myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE NOT Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY turneringsID ASC");
             myStmt.setString(1, arena);
             myRs = myStmt.executeQuery();
 
