@@ -1,5 +1,3 @@
-import javafx.scene.control.ComboBox;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -11,6 +9,7 @@ class AllSportTV_GUI extends JFrame {
     private final JTable table;
     private final ArenaDAO arenaDAO;
     private final TournamentDAO tournamentDAO;
+    private JButton btnSearch;
 
     /**
      * Create the frame.
@@ -30,21 +29,22 @@ class AllSportTV_GUI extends JFrame {
         JCheckBoxMenuItem chckbxmntmTournaments = new JCheckBoxMenuItem("Hosting arenas");
         JMenu mnCreate = new JMenu("Create");
         JMenuItem mntmCreateNewArena = new JMenuItem("Create new arena");
-        JMenuItem mntmAddArenaToTournament = new JMenuItem("Add arena to tournament");
         JPanel panel = new JPanel();
         FlowLayout flowLayout = (FlowLayout) panel.getLayout();
         JLabel lblEnterText = new JLabel("Show tournaments taking place at:");
         JButton btnSearch = new JButton("Search");
-        Box horizontalBox = Box.createHorizontalBox();
         JScrollPane scrollPane = new JScrollPane();
         JComboBox<String> comboBox = new JComboBox<>();
-
+        JButton btnAddATournament = new JButton("Add a tournament to this arena");
+        Component horizontalGlue = Box.createHorizontalGlue();
         JPanel contentPane = new JPanel();
+
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
         contentPane.add(scrollPane, BorderLayout.CENTER);
         contentPane.add(panel, BorderLayout.NORTH);
         table = new JTable();
+        this.btnSearch = btnSearch;
 
         setContentPane(contentPane);
         setJMenuBar(menuBar);
@@ -55,23 +55,25 @@ class AllSportTV_GUI extends JFrame {
         panel.add(lblEnterText);
         panel.add(comboBox);
         panel.add(btnSearch);
-        panel.add(horizontalBox);
+        panel.add(horizontalGlue);
+        panel.add(btnAddATournament);
         menuBar.add(mnSearch);
         mnSearch.add(chckbxmntmArenas);
         mnSearch.add(chckbxmntmTournaments);
         menuBar.add(mnCreate);
         mnCreate.add(mntmCreateNewArena);
-        mnCreate.add(mntmAddArenaToTournament);
 
         chckbxmntmArenas.addActionListener(e -> {
             if (!chckbxmntmArenas.getState()) {
                 chckbxmntmTournaments.setState(true);
                 lblEnterText.setText("Show arenas hosting:");
-                changeDropdown("Tournament", comboBox);
+                btnAddATournament.setVisible(false);
+                changeDropdown("Tournament", comboBox, true);
             } else {
                 chckbxmntmTournaments.setState(false);
                 lblEnterText.setText("Show tournaments taking place at:");
-                changeDropdown("Arena", comboBox);
+                btnAddATournament.setVisible(true);
+                changeDropdown("Arena", comboBox, true);
             }
         });
 
@@ -79,11 +81,13 @@ class AllSportTV_GUI extends JFrame {
             if (!chckbxmntmTournaments.getState()) {
                 chckbxmntmArenas.setState(true);
                 lblEnterText.setText("Show tournaments taking place at:");
-                changeDropdown("Arena", comboBox);
+                btnAddATournament.setVisible(true);
+                changeDropdown("Arena", comboBox, true);
             } else {
                 chckbxmntmArenas.setState(false);
                 lblEnterText.setText("Show arenas hosting:");
-                changeDropdown("Tournament", comboBox);
+                btnAddATournament.setVisible(false);
+                changeDropdown("Tournament", comboBox, true);
             }
         });
 
@@ -101,9 +105,9 @@ class AllSportTV_GUI extends JFrame {
             }
         });
 
-        mntmCreateNewArena.addActionListener(e -> createNewCreateArena());
+        btnAddATournament.addActionListener(e -> createNewAddArenaToTournament(comboBox.getSelectedItem().toString()));
 
-        mntmAddArenaToTournament.addActionListener(e -> createNewAddArenaToTournament());
+        mntmCreateNewArena.addActionListener(e -> createNewCreateArena());
 
         List<Arena> allArenas = arenaDAO.getAllArenas();
         String[] arenaSList = new String[allArenas.size()];
@@ -152,10 +156,10 @@ class AllSportTV_GUI extends JFrame {
         });
     }
 
-    private void createNewAddArenaToTournament() {
+    private void createNewAddArenaToTournament(String arena) {
         EventQueue.invokeLater(() -> {
             try {
-                AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO, this);
+                AddArenaToTournament frame = new AddArenaToTournament(tournamentDAO, arena, this);
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,7 +167,7 @@ class AllSportTV_GUI extends JFrame {
         });
     }
 
-    void changeDropdown(String s, JComboBox<String> comboBox) {
+    void changeDropdown(String s, JComboBox<String> comboBox, boolean all) {
         if(s.equals("Arena")) {
             List<Arena> allArenas = arenaDAO.getAllArenas();
             String[] arenaSList = new String[allArenas.size()];
@@ -174,15 +178,23 @@ class AllSportTV_GUI extends JFrame {
             }
             comboBox.setModel(new DefaultComboBoxModel<>(arenaSList));
         } else {
-            List<Tournament> allTournaments = tournamentDAO.getAllTournaments();
+            List<Tournament> allTournaments;
+            if(all)
+                allTournaments = tournamentDAO.getAllTournaments();
+            else
+                allTournaments = arenaDAO.searchCurrentArenaTournaments(s);
             String[] tournamentSList = new String[allTournaments.size()];
             int i = 0;
             for (Tournament a : allTournaments) {
-                tournamentSList[i] = a.getName();
+                tournamentSList[i] = a.getID() + " " + a.getName();
                 i++;
             }
             comboBox.setModel(new DefaultComboBoxModel<>(tournamentSList));
         }
+    }
+
+    void refresh() {
+        btnSearch.doClick();
     }
 
 }

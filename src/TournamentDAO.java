@@ -42,7 +42,7 @@ class TournamentDAO {
 
         try {
             myStmt = conn.createStatement();
-            myRs = myStmt.executeQuery("SELECT * FROM Turnering ORDER BY namn ASC");
+            myRs = myStmt.executeQuery("SELECT * FROM Turnering ORDER BY turneringsID ASC");
 
             while (myRs.next()) {
                 list.add(convertRowToTournament(myRs));
@@ -59,15 +59,43 @@ class TournamentDAO {
         return null;
     }
 
-    public List<Arena> searchTournamentArenas(String tournament) {
-        List<Arena> list = new ArrayList<>();
+    /*public List<Tournament> getAllExceptAddedTournaments() {
+        List<Tournament> list = new ArrayList<>();
 
         PreparedStatement myStmt;
         ResultSet myRs;
 
         try {
-            myStmt = conn.prepareStatement("SELECT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = Turnering.turneringsID AND Turnering.namn = ? ORDER BY arenanamn ASC");
-            myStmt.setString(1, tournament);
+            myStmt = conn.prepareStatement("SELECT * FROM Turnering WHERE turneringsID NOT IN (SELECT * FROM Turnering WHERE turneringsID = ?) ORDER BY namn ASC");
+            myStmt.setString(1, PLACEHOLDERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR);
+            myRs = myStmt.executeQuery();
+
+            while (myRs.next()) {
+                list.add(convertRowToTournament(myRs));
+            }
+
+            myStmt.close();
+            myRs.close();
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
+        }
+        return null;
+    }*/
+
+    public List<Arena> searchTournamentArenas(String tournament) {
+        List<Arena> list = new ArrayList<>();
+
+        PreparedStatement myStmt;
+        ResultSet myRs;
+        int tournamentID = Character.getNumericValue(tournament.charAt(0));
+        System.out.println(tournamentID);
+
+        try {
+            myStmt = conn.prepareStatement("SELECT DISTINCT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = ? ORDER BY arenanamn ASC");
+            myStmt.setInt(1, tournamentID);
             myRs = myStmt.executeQuery();
 
             while (myRs.next()) {
@@ -88,21 +116,15 @@ class TournamentDAO {
     public void linkArenaAndTournament(String arena, String tournament) {
 
         PreparedStatement myStmt;
-        ResultSet myRs;
 
         try {
-            myStmt = conn.prepareStatement("SELECT turneringsID FROM Turnering WHERE namn = ?");
-            myStmt.setString(1, tournament);
-            myRs = myStmt.executeQuery();
-            myRs.next();
-            Integer turneringsID = myRs.getInt("turneringsID");
+            Integer turneringsID = Character.getNumericValue(tournament.charAt(0));
             myStmt = conn.prepareStatement("INSERT INTO Turneringsarena VALUES (?, ?)");
             myStmt.setInt(1, turneringsID);
             myStmt.setString(2, arena);
             myStmt.executeUpdate();
 
             myStmt.close();
-            myRs.close();
             conn.commit();
 
         } catch (SQLException e) {
