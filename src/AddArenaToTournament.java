@@ -9,7 +9,7 @@ class AddArenaToTournament extends JFrame {
     /**
      * Create the frame.
      */
-    AddArenaToTournament(TournamentDAO newTournamentDAO, String arena, AllSportTV_GUI allSportTV_gui) {
+    AddArenaToTournament(TournamentDAO newTournamentDAO, String tournament, AllSportTV_GUI allSportTV_gui) {
         this.tournamentDAO = newTournamentDAO;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -18,13 +18,12 @@ class AddArenaToTournament extends JFrame {
         JPanel panel = new JPanel();
         JLabel lblArena = new JLabel("Arena:");
         JLabel lblTournament = new JLabel("Tournament:");
-        JLabel lblAddAArena = new JLabel("Add a arena to a arena");
+        JLabel lblAddAArena = new JLabel("Add a arena to a tournament");
         JPanel panel_1 = new JPanel();
         JButton btnCreate = new JButton("Create");
-
         JPanel contentPane = new JPanel();
-        JButton btnArena = new JButton(arena);
-        JComboBox<String> tourField = new JComboBox<>();
+        JButton btnTour = new JButton(tournament);
+        JComboBox<String> arenaField = new JComboBox<>();
 
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
@@ -32,7 +31,7 @@ class AddArenaToTournament extends JFrame {
         lblArena.setHorizontalAlignment(SwingConstants.CENTER);
         lblTournament.setHorizontalAlignment(SwingConstants.CENTER);
         lblAddAArena.setHorizontalAlignment(SwingConstants.CENTER);
-        btnArena.setEnabled(false);
+        btnTour.setEnabled(false);
 
         contentPane.add(panel, BorderLayout.CENTER);
         contentPane.add(lblAddAArena, BorderLayout.NORTH);
@@ -41,17 +40,17 @@ class AddArenaToTournament extends JFrame {
         setContentPane(contentPane);
         panel.add(lblArena);
         panel.add(lblTournament);
-        panel.add(btnArena);
-        panel.add(tourField);
+        panel.add(arenaField);
+        panel.add(btnTour);
         panel_1.add(btnCreate);
         panel.setLayout(new GridLayout(2, 2, 0, 0));
 
-        allSportTV_gui.changeDropdown(arena, tourField, false);
+        allSportTV_gui.changeDropdown(tournament, arenaField, false);
 
         btnCreate.addActionListener(e -> {
-            String tournamentLink = tourField.getSelectedItem().toString();
-            tournamentDAO.linkArenaAndTournament(arena, tournamentLink);
-            JOptionPane.showMessageDialog(panel, "Added!\n" + arena + " was added to " + tournamentLink);
+            String arenaLink = arenaField.getSelectedItem().toString();
+            tournamentDAO.linkArenaAndTournament(arenaLink, tournament);
+            JOptionPane.showMessageDialog(panel, "Added!\n" + arenaLink + " was added to " + tournament + ".");
             allSportTV_gui.refresh();
         });
     }

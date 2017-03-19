@@ -59,39 +59,12 @@ class TournamentDAO {
         return null;
     }
 
-    /*public List<Tournament> getAllExceptAddedTournaments() {
-        List<Tournament> list = new ArrayList<>();
-
-        PreparedStatement myStmt;
-        ResultSet myRs;
-
-        try {
-            myStmt = conn.prepareStatement("SELECT * FROM Turnering WHERE turneringsID NOT IN (SELECT * FROM Turnering WHERE turneringsID = ?) ORDER BY namn ASC");
-            myStmt.setString(1, PLACEHOLDERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR);
-            myRs = myStmt.executeQuery();
-
-            while (myRs.next()) {
-                list.add(convertRowToTournament(myRs));
-            }
-
-            myStmt.close();
-            myRs.close();
-
-            return list;
-
-        } catch (SQLException e) {
-            System.out.println("Something went wrong :(\nSQLException error code: " + e.getErrorCode());
-        }
-        return null;
-    }*/
-
     public List<Arena> searchTournamentArenas(String tournament) {
         List<Arena> list = new ArrayList<>();
 
         PreparedStatement myStmt;
         ResultSet myRs;
         int tournamentID = Character.getNumericValue(tournament.charAt(0));
-        System.out.println(tournamentID);
 
         try {
             myStmt = conn.prepareStatement("SELECT DISTINCT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = ? ORDER BY arenanamn ASC");
