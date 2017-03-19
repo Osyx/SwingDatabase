@@ -65,7 +65,6 @@ class TournamentDAO {
         PreparedStatement myStmt;
         ResultSet myRs;
         int tournamentID = Character.getNumericValue(tournament.charAt(0));
-        System.out.println(tournamentID);
 
         try {
             myStmt = conn.prepareStatement("SELECT DISTINCT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = ? ORDER BY arenanamn ASC");
