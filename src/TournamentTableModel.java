@@ -3,12 +3,11 @@ import java.util.List;
 
 class TournamentTableModel extends AbstractTableModel {
 
-    private static final int ID_COL = 0;
-    private static final int NAME_COL = 1;
-    private static final int START_COL = 2;
-    private static final int END_COL = 3;
+    private static final int NAME_COL = 0;
+    private static final int START_COL = 1;
+    private static final int END_COL = 2;
 
-    private final String[] columnNames = {"ID", "Name", "Start date", "End date"};
+    private final String[] columnNames = {"Name", "Start date", "End date"};
     private final List<Tournament> tournaments;
 
     public TournamentTableModel(List<Tournament> theTournaments) {
@@ -36,8 +35,6 @@ class TournamentTableModel extends AbstractTableModel {
         Tournament tempTournament = tournaments.get(row);
 
         switch (col) {
-            case ID_COL:
-                return tempTournament.getID();
             case NAME_COL:
                 return tempTournament.getName();
             case START_COL:
