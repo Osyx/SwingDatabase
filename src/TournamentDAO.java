@@ -59,16 +59,15 @@ class TournamentDAO {
         return null;
     }
 
-    public List<Arena> searchTournamentArenas(String tournament) {
+    public List<Arena> searchTournamentArenas(Tournament tournament) {
         List<Arena> list = new ArrayList<>();
 
         PreparedStatement myStmt;
         ResultSet myRs;
-        int tournamentID = Character.getNumericValue(tournament.charAt(0));
 
         try {
             myStmt = conn.prepareStatement("SELECT DISTINCT arenanamn AS namn, plats, storlek, byggdatum, aktiv FROM Turneringsarena, Turnering, Arena WHERE Turneringsarena.arenanamn = Arena.namn AND Turneringsarena.turneringsID = ? ORDER BY arenanamn ASC");
-            myStmt.setInt(1, tournamentID);
+            myStmt.setInt(1, tournament.getID());
             myRs = myStmt.executeQuery();
 
             while (myRs.next()) {
@@ -86,15 +85,14 @@ class TournamentDAO {
         return null;
     }
 
-    public void linkArenaAndTournament(String arena, String tournament) {
+    public void linkArenaAndTournament(Arena arena, Tournament tournament) {
 
         PreparedStatement myStmt;
 
         try {
-            Integer turneringsID = Character.getNumericValue(tournament.charAt(0));
             myStmt = conn.prepareStatement("INSERT INTO Turneringsarena VALUES (?, ?)");
-            myStmt.setInt(1, turneringsID);
-            myStmt.setString(2, arena);
+            myStmt.setInt(1, tournament.getID());
+            myStmt.setString(2, arena.getName());
             myStmt.executeUpdate();
 
             myStmt.close();

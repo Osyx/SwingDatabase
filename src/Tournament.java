@@ -32,7 +32,7 @@ public class Tournament {
     @Override
     public String toString() {
         return String
-                .format("Tournament [id=%s, name=%s, startdate=%s, enddate=%s]",
-                        id, name, startdate, enddate);
+                .format("%s, Start %s",
+                        name, startdate);
     }
 }

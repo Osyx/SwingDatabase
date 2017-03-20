@@ -61,7 +61,7 @@ class ArenaDAO {
         return null;
     }
 
-    public List<Tournament> searchArenaTournaments(String arena) {
+    public List<Tournament> searchArenaTournaments(Arena arena) {
         List<Tournament> list = new ArrayList<>();
 
         PreparedStatement myStmt;
@@ -69,7 +69,7 @@ class ArenaDAO {
 
         try {
             myStmt = conn.prepareStatement("SELECT turneringsID, namn, start, slut FROM Turnering, Turneringsarena WHERE Turnering.turneringsID = Turneringsarena.turneringsID AND Turneringsarena.arenanamn = ? ORDER BY turneringsID ASC");
-            myStmt.setString(1, arena);
+            myStmt.setString(1, arena.getName());
             myRs = myStmt.executeQuery();
 
             while (myRs.next()) {
@@ -88,16 +88,15 @@ class ArenaDAO {
         return null;
     }
 
-    public List<Arena> searchCurrentTournamentArenas(String tournament) {
+    public List<Arena> searchCurrentTournamentArenas(Tournament tournament) {
         List<Arena> list = new ArrayList<>();
 
         PreparedStatement myStmt;
         ResultSet myRs;
-        int tournamentID = Character.getNumericValue(tournament.charAt(0));
 
         try {
             myStmt = conn.prepareStatement("SELECT * FROM arena WHERE namn NOT IN (SELECT arenanamn FROM turneringsarena WHERE turneringsID = ? ORDER BY namn ASC)");
-            myStmt.setInt(1, tournamentID);
+            myStmt.setInt(1, tournament.getID());
             myRs = myStmt.executeQuery();
 
             while (myRs.next()) {

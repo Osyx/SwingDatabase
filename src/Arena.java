@@ -39,7 +39,6 @@ public class Arena {
     @Override
     public String toString() {
         return String
-                .format("Arena [name=%s, place=%s, size=%s, builddate=%s, active=%s]",
-                        name, place, size, builddate, active);
+                .format("%s", name);
     }
 }
